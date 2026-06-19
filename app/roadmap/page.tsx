@@ -21,7 +21,7 @@ export default function RoadmapPage() {
     }
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white">
+        <div className="flex min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-50 text-slate-900">
             {/* Sidebar — desktop only (mobile dùng bottom nav trong component) */}
             <Sidebar
                 activeScreen="screen11"
@@ -32,7 +32,7 @@ export default function RoadmapPage() {
 
             {/* Main content — đẩy sang phải trên desktop, full width trên mobile */}
             <main className={cn(
-                "flex-1 min-h-screen relative transition-all duration-300",
+                "flex-1 min-w-0 min-h-screen relative transition-all duration-300",
                 isSidebarCollapsed ? "ml-0 md:ml-20" : "ml-0 md:ml-64"
             )}>
                 {/* pb-20 để tránh bị bottom nav che trên mobile */}

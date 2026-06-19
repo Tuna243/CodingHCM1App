@@ -552,6 +552,63 @@ iframe {
   min-width: 52rem;
 }
 
+/* Roadmap light-surface compatibility */
+.roadmap-page {
+  color: #334155;
+}
+
+.roadmap-page [class~="text-white"] {
+  color: #0f172a;
+}
+
+.roadmap-page button[class~="text-white"],
+.roadmap-page [class*="from-sky-"][class~="text-white"],
+.roadmap-page [class*="from-cyan-"][class~="text-white"],
+.roadmap-page [class*="bg-emerald-"][class~="text-white"] {
+  color: #fff;
+}
+
+.roadmap-page [class~="text-slate-300"],
+.roadmap-page [class~="text-slate-400"] {
+  color: #475569;
+}
+
+.roadmap-page [class~="text-indigo-300"],
+.roadmap-page [class~="text-blue-300"] {
+  color: #0369a1;
+}
+
+.roadmap-page [class~="text-emerald-300"] {
+  color: #047857;
+}
+
+.roadmap-page [class~="text-amber-300"] {
+  color: #b45309;
+}
+
+.roadmap-page [class~="text-violet-300"] {
+  color: #7c3aed;
+}
+
+.roadmap-page [class*="bg-white/["],
+.roadmap-page [class*="bg-slate-8"],
+.roadmap-page [class*="bg-indigo-9"],
+.roadmap-page [class*="bg-blue-9"],
+.roadmap-page [class*="bg-emerald-9"],
+.roadmap-page [class*="bg-amber-9"] {
+  background: #f8fafc;
+}
+
+.roadmap-page [class~="border-white/10"],
+.roadmap-page [class~="border-white/5"],
+.roadmap-page [class~="border-white/8"] {
+  border-color: #dbeafe;
+}
+
+.roadmap-page video {
+  background: #0f172a;
+}
+
 @media (max-width: 767px) {
   .page-title {
     font-size: 2rem;

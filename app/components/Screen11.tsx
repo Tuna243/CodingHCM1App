@@ -21,7 +21,7 @@ function NavBtn({ screen, label, onNavigate }: { screen: string; label: string; 
     if (!onNavigate) return null;
     return (
         <button onClick={() => onNavigate(screen)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 text-xs font-semibold hover:bg-indigo-600/35 transition-colors">
+            className="inline-flex items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 transition-colors hover:bg-sky-100">
             <PlayCircle className="w-3.5 h-3.5" />
             {label}
         </button>
@@ -32,15 +32,15 @@ function NavBtn({ screen, label, onNavigate }: { screen: string; label: string; 
 type RC = { href: string; icon: React.ElementType; label: string; desc?: string; color?: string };
 function ResourceCard({ href, icon: Icon, label, desc, color = 'blue' }: RC) {
     const colors: Record<string, string> = {
-        blue: 'bg-blue-500/10 border-blue-500/20 text-blue-300 hover:bg-blue-500/15',
-        emerald: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300 hover:bg-emerald-500/15',
-        amber: 'bg-amber-500/10 border-amber-500/20 text-amber-300 hover:bg-amber-500/15',
-        violet: 'bg-violet-500/10 border-violet-500/20 text-violet-300 hover:bg-violet-500/15',
-        slate: 'bg-slate-500/10 border-slate-500/20 text-slate-300 hover:bg-slate-500/15',
+        blue: 'bg-sky-50 border-sky-200 text-sky-800 hover:border-sky-300 hover:bg-sky-100',
+        emerald: 'bg-emerald-50 border-emerald-200 text-emerald-800 hover:border-emerald-300 hover:bg-emerald-100',
+        amber: 'bg-amber-50 border-amber-200 text-amber-800 hover:border-amber-300 hover:bg-amber-100',
+        violet: 'bg-violet-50 border-violet-200 text-violet-800 hover:border-violet-300 hover:bg-violet-100',
+        slate: 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-100',
     };
     return (
         <a href={href} target="_blank" rel="noopener noreferrer"
-            className={`flex items-start gap-3 rounded-xl border p-3 transition-colors ${colors[color]}`}>
+            className={`flex items-start gap-3 rounded-xl border p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${colors[color]}`}>
             <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" />
             <div>
                 <p className="text-sm font-semibold leading-tight">{label}</p>
@@ -54,9 +54,9 @@ function ResourceCard({ href, icon: Icon, label, desc, color = 'blue' }: RC) {
 // ─── Callout ─────────────────────────────────────────────────────────────────
 function Callout({ icon, text, color = 'amber' }: { icon: string; text: string; color?: string }) {
     const c: Record<string, string> = {
-        amber: 'bg-amber-500/10 border-amber-500/25 text-amber-200',
-        blue: 'bg-blue-500/10 border-blue-500/25 text-blue-200',
-        emerald: 'bg-emerald-500/10 border-emerald-500/25 text-emerald-200',
+        amber: 'bg-amber-50 border-amber-200 text-amber-900',
+        blue: 'bg-sky-50 border-sky-200 text-sky-900',
+        emerald: 'bg-emerald-50 border-emerald-200 text-emerald-900',
     };
     return (
         <div className={`flex items-start gap-3 rounded-xl border px-4 py-3 ${c[color]}`}>
@@ -71,12 +71,12 @@ function Step({ n, title, children, last = false }: { n: number; title: string; 
     return (
         <div className="flex gap-4">
             <div className="flex flex-col items-center">
-                <div className="w-8 h-8 rounded-full bg-indigo-600 text-white text-sm font-bold flex items-center justify-center flex-shrink-0">{n}</div>
-                {!last && <div className="w-px flex-1 bg-white/10 my-1" />}
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-600 to-cyan-500 text-sm font-bold text-white shadow-md">{n}</div>
+                {!last && <div className="my-1 w-px flex-1 bg-sky-200" />}
             </div>
-            <div className="pb-6 flex-1">
-                <p className="font-bold text-white text-base mb-2 leading-tight">{title}</p>
-                <div className="space-y-3">{children}</div>
+            <div className="min-w-0 flex-1 pb-7">
+                <p className="mb-3 text-lg font-bold leading-tight text-slate-900">{title}</p>
+                <div className="space-y-3 rounded-2xl border border-sky-100 bg-white/85 p-4 shadow-sm md:p-5">{children}</div>
             </div>
         </div>
     );
@@ -87,8 +87,8 @@ function Check({ items }: { items: string[] }) {
     return (
         <ul className="space-y-2">
             {items.map((t, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
                     <span>{t}</span>
                 </li>
             ))}
@@ -112,9 +112,9 @@ function RubricTable({ groupLabel, color, rows }: { groupLabel: string; color: s
         indigo: 'text-indigo-400', emerald: 'text-emerald-400', amber: 'text-amber-400',
     };
     return (
-        <div className="rounded-xl border border-white/10 overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-sky-200 bg-white">
             <button onClick={() => setOpen(o => !o)}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors text-left">
+                className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-sky-50">
                 <span className={`text-xs font-bold uppercase tracking-wider ${labelCls[color] ?? 'text-slate-400'}`}>{groupLabel}</span>
                 <span className="flex items-center gap-2 text-xs text-slate-500">
                     {rows.length} tiêu chí
@@ -228,43 +228,44 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
     const [phase, setPhase] = useState('p1');
 
     return (
-        <div className="max-w-5xl mx-auto pb-16 px-2">
+        <div className="roadmap-page mx-auto max-w-6xl px-1 pb-16 sm:px-2">
 
             {/* Header */}
-            <div className="pt-2 pb-6 border-b border-white/10">
-                <h1 className="text-3xl font-bold text-white">Lộ Trình Ứng Viên → LEC</h1>
-                <p className="text-slate-400 mt-1">Tài liệu hướng dẫn từng bước dành cho giáo viên mới</p>
+            <div className="overflow-hidden rounded-3xl border border-sky-100 bg-white/90 p-5 shadow-sm md:p-8">
+                <p className="page-eyebrow mb-2 text-sky-700">Coding HCM1 · Teacher Journey</p>
+                <h1 className="page-title gradient-text">Lộ trình Ứng viên → LEC</h1>
+                <p className="page-lead mt-3 max-w-3xl text-slate-600">Từng bước từ quan sát lớp học, duyệt giảng đến khi đứng lớp chính thức và phát triển thành Super Mentor.</p>
 
                 {/* Journey bar */}
-                <div className="flex items-center gap-1 mt-4 flex-wrap">
+                <div className="mt-6 flex items-center gap-2 overflow-x-auto pb-1">
                     {[
-                        { label: 'Ứng viên', c: 'bg-slate-700 text-slate-300' },
-                        { label: '→', c: 'text-slate-600 bg-transparent border-0 px-0' },
-                        { label: 'Quan sát', c: 'bg-indigo-600/70 text-indigo-100' },
-                        { label: '→', c: 'text-slate-600 bg-transparent border-0 px-0' },
-                        { label: 'Duyệt giảng', c: 'bg-indigo-600/70 text-indigo-100' },
-                        { label: '→', c: 'text-slate-600 bg-transparent border-0 px-0' },
-                        { label: 'TA', c: 'bg-blue-600/70 text-blue-100' },
-                        { label: '→', c: 'text-slate-600 bg-transparent border-0 px-0' },
-                        { label: 'LEC', c: 'bg-emerald-600/70 text-emerald-100' },
-                        { label: '→', c: 'text-slate-600 bg-transparent border-0 px-0' },
-                        { label: 'Super Mentor', c: 'bg-amber-600/70 text-amber-100' },
+                        { label: 'Ứng viên', c: 'bg-slate-100 text-slate-700 border-slate-200' },
+                        { label: '→', c: 'text-slate-400 bg-transparent border-transparent px-0' },
+                        { label: 'Quan sát', c: 'bg-sky-50 text-sky-700 border-sky-200' },
+                        { label: '→', c: 'text-slate-400 bg-transparent border-transparent px-0' },
+                        { label: 'Duyệt giảng', c: 'bg-blue-50 text-blue-700 border-blue-200' },
+                        { label: '→', c: 'text-slate-400 bg-transparent border-transparent px-0' },
+                        { label: 'TA', c: 'bg-violet-50 text-violet-700 border-violet-200' },
+                        { label: '→', c: 'text-slate-400 bg-transparent border-transparent px-0' },
+                        { label: 'LEC', c: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+                        { label: '→', c: 'text-slate-400 bg-transparent border-transparent px-0' },
+                        { label: 'Super Mentor', c: 'bg-amber-50 text-amber-700 border-amber-200' },
                     ].map((s, i) => (
-                        <span key={i} className={`px-2.5 py-1 rounded-full text-xs font-semibold border border-transparent ${s.c}`}>{s.label}</span>
+                        <span key={i} className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold ${s.c}`}>{s.label}</span>
                     ))}
                 </div>
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 mt-6 mb-8 flex-wrap">
+            <div className="sticky top-0 z-20 -mx-1 mb-8 mt-6 grid grid-cols-2 gap-2 rounded-2xl border border-sky-100 bg-white/95 p-2 shadow-lg shadow-sky-900/5 backdrop-blur md:grid-cols-4">
                 {PHASES.map(p => (
                     <button key={p.id} onClick={() => setPhase(p.id)}
-                        className={`px-5 py-3 rounded-xl text-left transition-all border flex-1 min-w-[140px]
+                        className={`min-w-0 rounded-xl border px-3 py-3 text-left transition-all md:px-4
               ${phase === p.id
-                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-900/30'
-                                : 'bg-white/[0.04] border-white/10 text-slate-400 hover:bg-white/[0.07] hover:text-white'}`}>
-                        <div className="text-base font-bold">{p.emoji} {p.label}</div>
-                        <div className={`text-xs mt-0.5 ${phase === p.id ? 'text-indigo-200' : 'text-slate-500'}`}>{p.sub}</div>
+                                ? 'border-sky-600 bg-gradient-to-r from-sky-600 to-cyan-500 text-white shadow-md'
+                                : 'border-slate-200 bg-white text-slate-600 hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800'}`}>
+                        <div className="truncate text-sm font-bold md:text-base">{p.emoji} {p.label}</div>
+                        <div className={`mt-1 hidden text-xs leading-snug sm:block ${phase === p.id ? 'text-sky-50' : 'text-slate-500'}`}>{p.sub}</div>
                     </button>
                 ))}
             </div>
@@ -726,7 +727,7 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                                 { icon: '📚', label: 'Nắm vững giáo trình & bộ môn' },
                                 { icon: '📝', label: 'Đề xuất duyệt giảng Super Mentor với Leader' },
                                 { icon: '🎓', label: 'Đào tạo chuyên sâu & leader duyệt' },
-                                { icon: '�', label: 'Tham gia vai trò BGK' },
+                                { icon: '⚖️', label: 'Tham gia vai trò BGK' },
                                 { icon: '⭐', label: 'Super Mentor', highlight: true },
                             ].map((item, i, arr) => (
                                 <div key={i} className="flex items-start gap-3">
