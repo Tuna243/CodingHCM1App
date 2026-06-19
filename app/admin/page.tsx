@@ -133,7 +133,6 @@ export default function AdminPage() {
         { screen: 'screen1', views: 89, uniqueUsers: 12 },
         { screen: 'screen2', views: 67, uniqueUsers: 11 },
         { screen: 'screen3', views: 45, uniqueUsers: 9 },
-        { screen: 'screen5', views: 34, uniqueUsers: 8 },
         { screen: 'screen6', views: 28, uniqueUsers: 7 },
         { screen: 'screen7', views: 23, uniqueUsers: 6 },
         { screen: 'screen4', views: 19, uniqueUsers: 5 },

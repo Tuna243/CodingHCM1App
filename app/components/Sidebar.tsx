@@ -6,7 +6,7 @@
 
 import { getSessionId, getUserAgent, getUserId, isAppsScriptConfigured, trackLocalPageView, trackPageView } from '@/lib/appscript';
 import { cn } from "@/lib/utils";
-import { BookOpen, ExternalLink, Link as LinkIcon, Menu, MessageSquare, QrCode, Search, TrendingUp, X } from "lucide-react";
+import { ExternalLink, Link as LinkIcon, Menu, MessageSquare, QrCode, Search, TrendingUp, X } from "lucide-react";
 import { useEffect, useState } from 'react';
 
 interface SidebarProps {
@@ -20,14 +20,13 @@ const menuItems = [
   { id: 'screen1', label: 'Giáo trình', icon: QrCode, shortcut: '1' },
   { id: 'screen2', label: 'Tìm phiếu', icon: Search, shortcut: '2' },
   { id: 'screen4', label: 'Nhận xét Zalo', icon: MessageSquare, shortcut: '3' },
-  { id: 'screen5', label: 'Kiểm tra TP', icon: BookOpen, shortcut: '4' },
-  { id: 'screen6', label: 'Link Mentor', icon: LinkIcon, shortcut: '5' },
+  { id: 'screen6', label: 'Link Mentor', icon: LinkIcon, shortcut: '4' },
   { id: 'screen11', label: 'Lộ trình ứng viên', icon: TrendingUp, shortcut: 'L', href: '/roadmap' },
   { id: 'deal', label: 'Chỉ số deal lương', icon: ExternalLink, shortcut: 'D', href: 'https://tmsmindx.vercel.app/' },
 ];
 
 // Items hiển thị trên mobile bottom nav (tối đa 5)
-const MOBILE_NAV_ITEMS = ['screen1', 'screen2', 'screen4', 'screen5'];
+const MOBILE_NAV_ITEMS = ['screen1', 'screen2', 'screen4', 'screen6'];
 
 export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onToggle }: SidebarProps) {
   const [dealClicks, setDealClicks] = useState<number>(0);
@@ -104,11 +103,6 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
       <button key={item.id}
         onClick={() => onScreenChange(item.id)}
         className={cls}
-        style={item.id === 'screen5' && !isActive ? {
-          animation: 'borderPulse 2s ease-in-out infinite',
-          border: '2px solid', borderColor: 'rgba(99, 102, 241, 0.6)',
-          boxShadow: '0 0 10px rgba(99, 102, 241, 0.3)'
-        } : undefined}
         title={compact ? `${item.label} (${item.shortcut})` : undefined}>
         <Icon className="h-5 w-5 flex-shrink-0" />
         {!compact && (
@@ -211,10 +205,7 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
             return (
               <button key={item.id} onClick={() => handleMobileSelect(item.id)}
                 className={cn("w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                  isActive ? "bg-sky-600 text-white" : "text-slate-600 hover:bg-sky-50")}
-                style={item.id === 'screen5' && !isActive ? {
-                  border: '1.5px solid rgba(99, 102, 241, 0.5)',
-                } : undefined}>
+                  isActive ? "bg-sky-600 text-white" : "text-slate-600 hover:bg-sky-50")}>
                 <Icon className="w-5 h-5 flex-shrink-0" />
                 <span className="flex-1 text-left">{item.label}</span>
                 <span className={cn("text-xs font-bold px-1.5 py-0.5 rounded",

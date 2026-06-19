@@ -23,7 +23,7 @@ Duy trì ứng dụng hỗ trợ giáo viên Coding HCM1 với giao diện sáng
 
 ## Phạm vi điều hướng
 
-Các mục chính: Giáo trình, Tìm phiếu, Nhận xét Zalo, Kiểm tra TP, Link Mentor và Lộ trình ứng viên.
+Các mục chính: Giáo trình, Tìm phiếu, Nhận xét Zalo, Link Mentor và Lộ trình ứng viên.
 
 ## Skill dự án
 

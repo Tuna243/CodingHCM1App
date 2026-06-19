@@ -79,9 +79,9 @@ export default function Screen6() {
   const [showIframe, setShowIframe] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Optimize URL for Google Sheets/Forms - same as Screen5
+  // Optimize URL for Google Sheets/Forms
   const getOptimizedUrl = (url: string) => {
-    // For Google Sheets, use the same approach as Screen5
+    // Keep Google Sheets on the direct edit URL
     if (url.includes('docs.google.com/spreadsheets')) {
       // Extract sheet ID and gid from URL
       const sheetIdMatch = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
@@ -90,7 +90,7 @@ export default function Screen6() {
       if (sheetIdMatch && gidMatch) {
         const sheetId = sheetIdMatch[1];
         const gid = gidMatch[1];
-        // Use the same URL format as Screen5 - direct edit URL
+        // Use the direct edit URL
         return `https://docs.google.com/spreadsheets/d/${sheetId}/edit?gid=${gid}#gid=${gid}`;
       }
       // If we can't extract, return original URL
@@ -218,7 +218,7 @@ export default function Screen6() {
               </Button>
             </div>
 
-            {/* Iframe Container - Same as Screen5 for fast loading */}
+            {/* Iframe container */}
             <div className="flex-1 relative overflow-hidden bg-white" style={{ height: 'calc(100vh - 48px)' }}>
               {activeUrl && (
                 <iframe

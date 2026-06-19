@@ -56,7 +56,7 @@ export default function Screen7() {
 
   // Optimize URL for Google Sheets/Forms
   const getOptimizedUrl = useCallback((url: string) => {
-    // For Google Sheets, use the same approach as Screen5
+    // Keep Google Sheets on the direct edit URL
     if (url.includes('docs.google.com/spreadsheets')) {
       // Extract sheet ID and gid from URL
       const sheetIdMatch = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
@@ -65,7 +65,7 @@ export default function Screen7() {
       if (sheetIdMatch && gidMatch) {
         const sheetId = sheetIdMatch[1];
         const gid = gidMatch[1];
-        // Use the same URL format as Screen5 - direct edit URL
+        // Use the direct edit URL
         return `https://docs.google.com/spreadsheets/d/${sheetId}/edit?gid=${gid}#gid=${gid}`;
       }
       // If we can't extract, return original URL

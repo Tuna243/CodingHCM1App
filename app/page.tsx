@@ -12,7 +12,6 @@ import Screen1 from './components/Screen1';
 import Screen11 from './components/Screen11';
 import Screen2 from './components/Screen2';
 import Screen4 from './components/Screen4';
-import Screen5 from './components/Screen5';
 import Screen6 from './components/Screen6';
 import Sidebar from './components/Sidebar';
 import StatisticsButton from './components/StatisticsButton';
@@ -24,12 +23,11 @@ const KEY_TO_SCREEN: Record<string, string> = {
   '1': 'screen1',
   '2': 'screen2',
   '3': 'screen4',
-  '4': 'screen5',
-  '5': 'screen6',
+  '4': 'screen6',
 };
 
 // Screens cần full height
-const FULLSCREEN_SCREENS = ['screen5', 'screen6'];
+const FULLSCREEN_SCREENS = ['screen6'];
 
 // Style cho screen ẩn - dùng visibility để browser skip rendering
 const hiddenStyle: React.CSSProperties = {
@@ -168,13 +166,6 @@ export default function Home() {
             {loadedScreens.has('screen4') && (
               <div style={activeScreen === 'screen4' ? visibleStyle : hiddenStyle}>
                 <Screen4 />
-              </div>
-            )}
-
-            {/* Screen 5 */}
-            {loadedScreens.has('screen5') && (
-              <div style={activeScreen === 'screen5' ? { ...visibleStyle, height: '100%' } : hiddenStyle}>
-                <Screen5 />
               </div>
             )}
 
