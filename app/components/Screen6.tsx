@@ -145,7 +145,7 @@ export default function Screen6() {
                 Link Mentor
               </h1>
             </div>
-            <p className="text-[11px] text-[#94a3b8] ml-12 leading-relaxed">
+            <p className="text-xs text-[#94a3b8] ml-12 leading-relaxed">
               Truy cập nhanh các liên kết
             </p>
           </div>
@@ -155,7 +155,7 @@ export default function Screen6() {
               <div key={sectionIndex} className="space-y-1.5">
                 <div className="flex items-center gap-2 px-2 mb-2">
                   <div className="h-px flex-1 bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent"></div>
-                  <h3 className="text-[10px] font-semibold text-[#a5b4fc] uppercase tracking-wider">
+                  <h3 className="text-xs font-semibold text-[#a5b4fc] uppercase tracking-wider">
                     {section.title}
                   </h3>
                   <div className="h-px flex-1 bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent"></div>
@@ -174,7 +174,7 @@ export default function Screen6() {
                       )}
                     >
                       <Icon className="h-3.5 w-3.5 text-[#a5b4fc] flex-shrink-0" />
-                      <span className="font-medium text-[11px] text-[#f8fafc] truncate">
+                      <span className="font-medium text-xs text-[#f8fafc] truncate">
                         {item.title}
                       </span>
                     </button>

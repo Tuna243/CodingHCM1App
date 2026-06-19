@@ -37,13 +37,13 @@ export default function Screen1() {
   return (
     <div className="relative flex min-h-screen flex-col space-y-6 p-4 md:p-8">
       <div className="text-center">
-        <p className="mb-2 text-sm font-bold uppercase tracking-[0.24em] text-sky-700">
+        <p className="page-eyebrow mb-2 text-sky-700">
           Coding HCM1
         </p>
-        <h1 className="gradient-text mb-3 text-4xl font-bold tracking-tight md:text-5xl">
+        <h1 className="page-title gradient-text mb-3">
           Giáo trình Coding
         </h1>
-        <p className="mx-auto max-w-2xl text-lg text-slate-600">
+        <p className="page-lead mx-auto max-w-2xl text-slate-600">
           Truy cập kho học liệu Coding tập trung và tạo mã QR để mở nhanh trên thiết bị lớp học.
         </p>
       </div>

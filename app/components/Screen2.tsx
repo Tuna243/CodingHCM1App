@@ -591,7 +591,7 @@ export default function Screen2() {
   }, [teacherName, studentName, location, grade, subject, fromDate, toDate]);
 
   return (
-    <div className="relative flex flex-col p-4 md:p-8 space-y-6 min-h-screen">
+    <div className="relative flex min-w-0 max-w-full flex-col p-4 md:p-8 space-y-6 min-h-screen">
       {/* Decorative shapes */}
       <div className="floating-shape shape-1" />
       <div className="floating-shape shape-2" />
@@ -631,15 +631,15 @@ export default function Screen2() {
 
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text tracking-tight">
+        <h1 className="page-title gradient-text mb-4">
           Tìm Phiếu Checkout
         </h1>
       </div>
 
       {/* Filter Section */}
-      <Card className="glass-card border-white/10">
+      <Card className="glass-card min-w-0 max-w-full border-white/10">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-[#a5b4fc] text-xl">
+          <CardTitle className="section-title flex items-center gap-2 text-[#a5b4fc]">
             <Filter className="h-5 w-5" />
             Bộ lọc tìm kiếm
           </CardTitle>
@@ -656,7 +656,7 @@ export default function Screen2() {
           <div className="grid gap-4 md:grid-cols-4">
             {/* Column 1: Quick Filters */}
             <div className="bg-[rgba(15,23,42,0.4)] border border-white/10 rounded-xl p-4 space-y-3">
-              <div className="text-center text-[#a5b4fc] font-semibold text-sm uppercase tracking-wide border-b border-white/10 pb-2">
+              <div className="label-text text-center text-[#a5b4fc] uppercase tracking-wide border-b border-white/10 pb-2">
                 ⚡ Bộ lọc nhanh
               </div>
               <div className="space-y-2">
@@ -708,7 +708,7 @@ export default function Screen2() {
 
             {/* Column 2: People */}
             <div className="bg-[rgba(15,23,42,0.4)] border border-white/10 rounded-xl p-4 space-y-3">
-              <div className="text-center text-[#a5b4fc] font-semibold text-sm uppercase tracking-wide border-b border-white/10 pb-2">
+              <div className="label-text text-center text-[#a5b4fc] uppercase tracking-wide border-b border-white/10 pb-2">
                 👥 Tìm theo người
               </div>
               <div className="space-y-3">
@@ -739,7 +739,7 @@ export default function Screen2() {
 
             {/* Column 3: Location & Subject */}
             <div className="bg-[rgba(15,23,42,0.4)] border border-white/10 rounded-xl p-4 space-y-3">
-              <div className="text-center text-[#a5b4fc] font-semibold text-sm uppercase tracking-wide border-b border-white/10 pb-2">
+              <div className="label-text text-center text-[#a5b4fc] uppercase tracking-wide border-b border-white/10 pb-2">
                 🎓 Địa điểm & môn học
               </div>
               <div className="space-y-3">
@@ -812,7 +812,7 @@ export default function Screen2() {
 
             {/* Column 4: Time & Actions */}
             <div className="bg-[rgba(15,23,42,0.4)] border border-white/10 rounded-xl p-4 space-y-3">
-              <div className="text-center text-[#a5b4fc] font-semibold text-sm uppercase tracking-wide border-b border-white/10 pb-2">
+              <div className="label-text text-center text-[#a5b4fc] uppercase tracking-wide border-b border-white/10 pb-2">
                 ⏰ Thời gian & thao tác
               </div>
               <div className="space-y-3">
@@ -887,9 +887,9 @@ export default function Screen2() {
       </Card>
 
       {/* Results Section */}
-      <Card className="glass-card border-white/10">
+      <Card className="glass-card min-w-0 max-w-full border-white/10">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between text-[#a5b4fc] text-xl">
+          <CardTitle className="section-title flex flex-wrap items-center justify-between gap-3 text-[#a5b4fc]">
             <div className="flex items-center gap-2">
               <Search className="h-5 w-5" />
               Kết quả tìm kiếm
@@ -926,44 +926,44 @@ export default function Screen2() {
               <div className="text-[#cbd5e1] text-sm">Thử thay đổi bộ lọc để tìm kiếm</div>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
+            <div className="data-table-shell max-h-[70vh]">
+              <table className="app-table checkout-table">
                 <thead>
-                  <tr className="bg-[rgba(15,23,42,0.8)] border-b border-white/10">
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">ID</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Timestamp</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Giáo viên</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Sale</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Học viên</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Tuổi</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Ngày TN</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Khối</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Môn</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Cơ sở</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Điểm</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Confirm time</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Nhận xét</th>
-                    <th className="p-3 text-left text-xs font-semibold text-[#a5b4fc] uppercase tracking-wide">Link</th>
+                  <tr>
+                    <th>ID</th>
+                    <th>Thời điểm tạo</th>
+                    <th>Giáo viên</th>
+                    <th>Sale</th>
+                    <th>Học viên</th>
+                    <th>Tuổi</th>
+                    <th>Ngày trải nghiệm</th>
+                    <th>Khối</th>
+                    <th>Môn</th>
+                    <th>Cơ sở</th>
+                    <th>Điểm</th>
+                    <th>Xác nhận</th>
+                    <th>Nhận xét</th>
+                    <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredData.map((row, index) => (
                     <tr
                       key={index}
-                      className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                      className="transition-colors"
                     >
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.id}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{formatDate(row.timestamp, true)}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.teacher}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.sale}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.student}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.age}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{formatDate(row.date)}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.grade}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.subject}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.location}</td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.score}</td>
-                      <td className="p-3 text-sm text-center">
+                      <td>{row.id}</td>
+                      <td>{formatDate(row.timestamp, true)}</td>
+                      <td>{row.teacher}</td>
+                      <td>{row.sale}</td>
+                      <td>{row.student}</td>
+                      <td>{row.age}</td>
+                      <td>{formatDate(row.date)}</td>
+                      <td>{row.grade}</td>
+                      <td>{row.subject}</td>
+                      <td>{row.location}</td>
+                      <td>{row.score}</td>
+                      <td className="text-center">
                         {row.learningMonths ? (
                           <span className={cn(
                             "px-2 py-1 rounded text-xs font-semibold",
@@ -979,8 +979,8 @@ export default function Screen2() {
                           <span className="text-[#cbd5e1]">-</span>
                         )}
                       </td>
-                      <td className="p-3 text-sm text-[#f8fafc]">{row.comment}</td>
-                      <td className="p-3">
+                      <td>{row.comment}</td>
+                      <td>
                         {row.link ? (
                           <div className="flex gap-2">
                             <Button

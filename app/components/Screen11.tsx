@@ -138,22 +138,22 @@ function RubricTable({ groupLabel, color, rows }: { groupLabel: string; color: s
                         ))}
                     </div>
                     {/* Desktop: table */}
-                    <div className="hidden md:block overflow-x-auto">
-                        <table className="w-full text-xs">
+                    <div className="data-table-shell hidden md:block">
+                        <table className="app-table rubric-table">
                             <thead>
-                                <tr className="border-t border-white/10 bg-white/[0.03]">
-                                    <th className="text-left px-4 py-2 text-slate-400 font-semibold w-1/4">Tiêu chí</th>
+                                <tr>
+                                    <th className="w-1/4">Tiêu chí</th>
                                     {SCORE_META.map(({ label, cls }) => (
-                                        <th key={label} className={`px-3 py-2 font-bold text-center ${cls}`}>{label}</th>
+                                        <th key={label} className={`text-center ${cls}`}>{label}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
                                 {rows.map((r, i) => (
-                                    <tr key={i} className="border-t border-white/5 even:bg-white/[0.02]">
-                                        <td className="px-4 py-2.5 text-white font-medium align-top leading-tight">{r.criterion}</td>
+                                    <tr key={i}>
+                                        <td className="font-semibold text-slate-900">{r.criterion}</td>
                                         {SCORE_META.map(({ key }) => (
-                                            <td key={key} className="px-3 py-2.5 text-slate-400 align-top leading-relaxed">{r[key]}</td>
+                                            <td key={key}>{r[key]}</td>
                                         ))}
                                     </tr>
                                 ))}
@@ -526,18 +526,18 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                     </Step>
 
                     <Step n={2} title="Quy trình & Timeline một buổi học (1.5h)">
-                        <div className="overflow-x-auto rounded-xl border border-white/10 mt-2">
-                            <table className="w-full text-xs text-left text-slate-300">
-                                <thead className="bg-white/[0.03] text-slate-400 font-semibold uppercase">
+                        <div className="data-table-shell mt-2">
+                            <table className="app-table timeline-table">
+                                <thead>
                                     <tr>
-                                        <th className="px-4 py-3 border-b border-white/5 w-1/4">Mốc thời gian / Hoạt động</th>
-                                        <th className="px-4 py-3 border-b border-white/5 w-24">Thời gian</th>
-                                        <th className="px-4 py-3 border-b border-white/5">Lưu ý / Hướng dẫn</th>
+                                        <th className="w-1/4">Mốc thời gian / Hoạt động</th>
+                                        <th className="w-28">Thời gian</th>
+                                        <th>Lưu ý / Hướng dẫn</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-white/5">
-                                    <tr className="bg-white/[0.02]">
-                                        <td colSpan={3} className="px-4 py-2 text-indigo-300 font-semibold bg-indigo-900/10">Trước buổi học</td>
+                                <tbody>
+                                    <tr className="table-section">
+                                        <td colSpan={3}>Trước buổi học</td>
                                     </tr>
                                     <tr>
                                         <td className="px-4 py-3 font-semibold text-white align-top">Chuẩn bị bộ KIT</td>
@@ -547,8 +547,8 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                                             Kiểm tra số lượng pin và tablet đầy đủ, thiếu hoặc hết pin liên hệ ngay với CS.
                                         </td>
                                     </tr>
-                                    <tr className="bg-white/[0.02]">
-                                        <td colSpan={3} className="px-4 py-2 text-indigo-300 font-semibold bg-indigo-900/10">Trong buổi học</td>
+                                    <tr className="table-section">
+                                        <td colSpan={3}>Trong buổi học</td>
                                     </tr>
                                     <tr>
                                         <td className="px-4 py-3 font-semibold text-white align-top">Ổn định học viên</td>
@@ -594,8 +594,8 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                                             Hỏi đáp tổng kết: <em>&quot;Hôm nay học chủ đề gì? Lắp chi tiết gì đặc biệt? Khối lệnh nào mới?&quot;</em> Nhắc cắt ghế trước khi về.
                                         </td>
                                     </tr>
-                                    <tr className="bg-white/[0.02]">
-                                        <td colSpan={3} className="px-4 py-2 text-indigo-300 font-semibold bg-indigo-900/10">Sau buổi học</td>
+                                    <tr className="table-section">
+                                        <td colSpan={3}>Sau buổi học</td>
                                     </tr>
                                     <tr>
                                         <td className="px-4 py-3 font-semibold text-white align-top">Kiểm tra & Nhận xét</td>

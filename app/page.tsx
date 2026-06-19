@@ -144,7 +144,7 @@ export default function Home() {
         />
         <main
           className={cn(
-            "flex-1 min-h-screen relative",
+            "flex-1 min-w-0 min-h-screen relative",
             isSidebarCollapsed ? "ml-0 md:ml-20" : "ml-0 md:ml-64"
           )}
           style={{ transition: 'margin-left 0.15s ease-out' }}

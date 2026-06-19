@@ -26,13 +26,13 @@ export default function Screen4() {
   return (
     <div className="relative flex min-h-screen flex-col space-y-6 p-4 md:p-8">
       <div className="text-center">
-        <p className="mb-2 text-sm font-bold uppercase tracking-[0.24em] text-sky-700">
+        <p className="page-eyebrow mb-2 text-sky-700">
           Tài liệu giáo viên
         </p>
-        <h1 className="gradient-text mb-3 text-4xl font-bold tracking-tight md:text-5xl">
+        <h1 className="page-title gradient-text mb-3">
           Nhận xét Zalo
         </h1>
-        <p className="text-lg text-slate-600">
+        <p className="page-lead text-slate-600">
           Mẫu và hướng dẫn gửi nhận xét học tập tới phụ huynh.
         </p>
       </div>

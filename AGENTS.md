@@ -18,6 +18,7 @@ Duy trì ứng dụng hỗ trợ giáo viên Coding HCM1 với giao diện sáng
 - Dữ liệu giáo viên chỉ gồm `name`, `code`, `center`.
 - Không khôi phục các tab đã loại bỏ nếu chưa có yêu cầu rõ ràng.
 - Mọi thay đổi giao diện phải kiểm tra desktop và mobile.
+- Tuân thủ type scale và table system trong `docs/UI_SYSTEM.md`; không dùng font nhỏ hơn 12px.
 - Nội dung mặc định đặt trong `lib/contentSettings.ts`.
 
 ## Phạm vi điều hướng
