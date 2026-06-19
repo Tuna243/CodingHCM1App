@@ -79,7 +79,6 @@ export default function Screen1() {
               <ExternalLink className="h-5 w-5" />
               Mở giáo trình Coding
             </Button>
-            <p className="break-all text-xs text-slate-500">{curriculumUrl}</p>
           </CardContent>
         </Card>
 
