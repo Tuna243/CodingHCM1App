@@ -1,13 +1,7 @@
-/**
- * © Teacher Code Modal - Nhập mã giáo viên
- * Bản quyền thuộc về khu vực HCM1 & 4 bởi Trần Chí Bảo
- */
-
 'use client';
 
-import { cn } from '@/lib/utils';
 import { UserCheck } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
@@ -16,117 +10,110 @@ interface TeacherCodeModalProps {
   onSubmit: (teacherCode: string) => void;
 }
 
+interface Teacher {
+  name: string;
+  code: string;
+  center: string;
+}
+
 export default function TeacherCodeModal({ onSubmit }: TeacherCodeModalProps) {
-  const [teacherCode, setTeacherCode] = useState('');
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [query, setQuery] = useState('');
+  const [selectedCode, setSelectedCode] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/teachers')
+      .then((response) => response.json())
+      .then((data) => setTeachers(data.teachers ?? []))
+      .catch(() => setError('Không thể tải danh sách giáo viên.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredTeachers = useMemo(() => {
+    const keyword = query.trim().toLocaleLowerCase('vi');
+    if (!keyword) return teachers;
+    return teachers.filter((teacher) =>
+      `${teacher.name} ${teacher.code} ${teacher.center}`.toLocaleLowerCase('vi').includes(keyword),
+    );
+  }, [query, teachers]);
 
   const handleSubmit = () => {
-    const code = teacherCode.trim();
-    
-    if (!code) {
-      setError('Vui lòng nhập mã giáo viên!');
+    if (!selectedCode) {
+      setError('Vui lòng chọn giáo viên trong danh sách.');
       return;
     }
-
-    if (code.length < 3) {
-      setError('Mã giáo viên phải có ít nhất 3 ký tự!');
-      return;
-    }
-
-    // Validate format (chấp nhận cả chữ hoa, chữ thường và số)
-    if (!/^[A-Za-z0-9]+$/.test(code)) {
-      setError('Mã giáo viên chỉ được chứa chữ cái và số!');
-      return;
-    }
-
-    // Submit as-is, no uppercase
-    onSubmit(code);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
-    }
+    onSubmit(selectedCode);
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <Card className="w-full max-w-md bg-[#1e293b] border-white/10 shadow-2xl animate-in zoom-in-95 duration-300">
-        <CardHeader className="border-b border-white/10 text-center">
-          <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/45 p-4 backdrop-blur-sm">
+      <Card className="w-full max-w-xl border-sky-100 bg-white shadow-2xl">
+        <CardHeader className="border-b border-slate-100 text-center">
+          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-sky-600 to-cyan-500">
             <UserCheck className="h-8 w-8 text-white" />
           </div>
-          <CardTitle className="text-2xl font-bold gradient-text">
-            Chào mừng đến với AppRBT
+          <CardTitle className="gradient-text text-2xl font-bold">
+            Coding HCM1
           </CardTitle>
-          <CardDescription className="text-[#94a3b8] mt-2">
-            Vui lòng nhập mã giáo viên của bạn để tiếp tục
+          <CardDescription className="mt-2 text-slate-600">
+            Chọn giáo viên Coding đang hoạt động tại bốn cơ sở HCM1.
           </CardDescription>
         </CardHeader>
+        <CardContent className="space-y-4 pt-6">
+          <Input
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setError('');
+            }}
+            placeholder="Tìm theo tên, mã hoặc cơ sở..."
+            className="h-12 border-slate-200 bg-white text-slate-900"
+            autoFocus
+          />
 
-        <CardContent className="pt-6 space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="teacherCode" className="text-sm font-medium text-[#f8fafc]">
-              Mã giáo viên <span className="text-red-400">*</span>
-            </label>
-            <Input
-              id="teacherCode"
-              type="text"
-              value={teacherCode}
-              onChange={(e) => {
-                setTeacherCode(e.target.value);
-                setError('');
-              }}
-              onKeyPress={handleKeyPress}
-              placeholder="Ví dụ: gv001, baotc, GV123, ..."
-              className={cn(
-                "h-12 text-center text-lg font-semibold tracking-wider",
-                "bg-[#0f172a] border-white/10 text-white",
-                "focus:border-purple-500 focus:ring-purple-500",
-                error && "border-red-500"
-              )}
-              autoFocus
-              maxLength={20}
-            />
-            {error && (
-              <p className="text-sm text-red-400 flex items-center gap-1">
-                <span>⚠️</span> {error}
-              </p>
+          <div className="max-h-72 space-y-2 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-2">
+            {loading ? (
+              <p className="p-6 text-center text-sm text-slate-500">Đang tải danh sách giáo viên...</p>
+            ) : filteredTeachers.length ? (
+              filteredTeachers.map((teacher) => (
+                <button
+                  key={teacher.code}
+                  onClick={() => {
+                    setSelectedCode(teacher.code);
+                    setError('');
+                  }}
+                  className={`w-full rounded-xl border p-3 text-left transition ${
+                    selectedCode === teacher.code
+                      ? 'border-sky-500 bg-sky-100'
+                      : 'border-transparent bg-white hover:border-sky-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-semibold text-slate-900">{teacher.name}</span>
+                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-sky-700">
+                      {teacher.code}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500">{teacher.center}</p>
+                </button>
+              ))
+            ) : (
+              <p className="p-6 text-center text-sm text-slate-500">Không tìm thấy giáo viên phù hợp.</p>
             )}
           </div>
 
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">ℹ️</span>
-              <div className="space-y-1 text-sm text-[#cbd5e1]">
-                <p className="font-semibold text-white">Lưu ý:</p>
-                <ul className="list-disc list-inside space-y-1 text-[#94a3b8]">
-                  <li>Mã giáo viên dùng để thống kê và phân tích</li>
-                  <li>Mã sẽ được lưu và không cần nhập lại</li>
-                  <li>Nhập bình thường, mã sẽ được lưu y nguyên</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          {error && <p className="text-sm text-red-600">⚠️ {error}</p>}
 
           <Button
             onClick={handleSubmit}
-            disabled={!teacherCode.trim()}
-            className={cn(
-              "w-full h-12 text-lg font-semibold",
-              "bg-gradient-to-r from-purple-500 to-pink-500",
-              "hover:from-purple-600 hover:to-pink-600",
-              "disabled:opacity-50 disabled:cursor-not-allowed",
-              "transition-all duration-300"
-            )}
+            disabled={!selectedCode}
+            className="h-12 w-full bg-gradient-to-r from-sky-600 to-cyan-500 text-base text-white hover:from-sky-700 hover:to-cyan-600"
           >
-            <UserCheck className="h-5 w-5 mr-2" />
-            Xác nhận
+            <UserCheck className="h-5 w-5" />
+            Xác nhận giáo viên
           </Button>
-
-          <p className="text-xs text-center text-[#64748b]">
-            © 2024 AppRBT HCM1&4 - Phát triển bởi Trần Chí Bảo
-          </p>
         </CardContent>
       </Card>
     </div>

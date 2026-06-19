@@ -1,5 +1,5 @@
 /**
- * © Bản quyền thuộc về khu vực HCM1 & 4 bởi Trần Chí Bảo
+ * Coding HCM1 teaching support app
  */
 
 'use client';
@@ -9,16 +9,11 @@ import { cn } from '@/lib/utils';
 import { useCallback, useEffect, useState } from 'react';
 import FeedbackButton from './components/FeedbackButton';
 import Screen1 from './components/Screen1';
-import Screen10 from './components/Screen10';
 import Screen11 from './components/Screen11';
 import Screen2 from './components/Screen2';
-import Screen3 from './components/Screen3';
 import Screen4 from './components/Screen4';
 import Screen5 from './components/Screen5';
 import Screen6 from './components/Screen6';
-import Screen7 from './components/Screen7';
-import Screen8 from './components/Screen8';
-import Screen9 from './components/Screen9';
 import Sidebar from './components/Sidebar';
 import StatisticsButton from './components/StatisticsButton';
 import TeacherCodeModal from './components/TeacherCodeModal';
@@ -26,13 +21,15 @@ import { usePageTracking } from './hooks/usePageTracking';
 
 // Keyboard mapping - định nghĩa ngoài component để không tạo lại mỗi render
 const KEY_TO_SCREEN: Record<string, string> = {
-  '1': 'screen1', '2': 'screen2', '3': 'screen3',
-  '4': 'screen4', '5': 'screen5', '6': 'screen6',
-  '7': 'screen7', '8': 'screen8', '9': 'screen9', '0': 'screen10',
+  '1': 'screen1',
+  '2': 'screen2',
+  '3': 'screen4',
+  '4': 'screen5',
+  '5': 'screen6',
 };
 
 // Screens cần full height
-const FULLSCREEN_SCREENS = ['screen5', 'screen6', 'screen7', 'screen9', 'screen10'];
+const FULLSCREEN_SCREENS = ['screen5', 'screen6'];
 
 // Style cho screen ẩn - dùng visibility để browser skip rendering
 const hiddenStyle: React.CSSProperties = {
@@ -138,7 +135,7 @@ export default function Home() {
         <TeacherCodeModal onSubmit={handleTeacherCodeSubmit} />
       )}
 
-      <div className="flex min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
+      <div className="flex min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-50">
         <Sidebar
           activeScreen={activeScreen}
           onScreenChange={handleScreenChange}
@@ -167,13 +164,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Screen 3 */}
-            {loadedScreens.has('screen3') && (
-              <div style={activeScreen === 'screen3' ? visibleStyle : hiddenStyle}>
-                <Screen3 />
-              </div>
-            )}
-
             {/* Screen 4 */}
             {loadedScreens.has('screen4') && (
               <div style={activeScreen === 'screen4' ? visibleStyle : hiddenStyle}>
@@ -192,34 +182,6 @@ export default function Home() {
             {loadedScreens.has('screen6') && (
               <div style={activeScreen === 'screen6' ? { ...visibleStyle, height: '100%' } : hiddenStyle}>
                 <Screen6 />
-              </div>
-            )}
-
-            {/* Screen 7 */}
-            {loadedScreens.has('screen7') && (
-              <div style={activeScreen === 'screen7' ? { ...visibleStyle, height: '100%' } : hiddenStyle}>
-                <Screen7 />
-              </div>
-            )}
-
-            {/* Screen 8 */}
-            {loadedScreens.has('screen8') && (
-              <div style={activeScreen === 'screen8' ? visibleStyle : hiddenStyle}>
-                <Screen8 />
-              </div>
-            )}
-
-            {/* Screen 9 */}
-            {loadedScreens.has('screen9') && (
-              <div style={activeScreen === 'screen9' ? { ...visibleStyle, height: '100%' } : hiddenStyle}>
-                <Screen9 />
-              </div>
-            )}
-
-            {/* Screen 10 */}
-            {loadedScreens.has('screen10') && (
-              <div style={activeScreen === 'screen10' ? { ...visibleStyle, height: '100%' } : hiddenStyle}>
-                <Screen10 />
               </div>
             )}
 

@@ -1,5 +1,5 @@
 /**
- * © Bản quyền thuộc về khu vực HCM1 & 4 bởi Trần Chí Bảo
+ * Coding HCM1
  */
 
 import type { Metadata } from "next";
@@ -30,12 +30,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Approbotics - QR Generator",
-  description: "Tạo mã QR và quản lý bài học Robotics",
-  icons: {
-    icon: 'https://check-cong-lms.vercel.app/favicon.ico',
-    apple: 'https://check-cong-lms.vercel.app/favicon.ico',
-  },
+  title: "Coding HCM1 - Teaching Hub",
+  description: "Cổng tài liệu và công cụ hỗ trợ giáo viên Coding HCM1",
 };
 
 export default function RootLayout({
@@ -51,8 +47,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://docs.google.com" />
         <link rel="preconnect" href="https://docs.googleusercontent.com" />
         <link rel="dns-prefetch" href="https://drive.google.com" />
-        <link rel="icon" type="image/png" href="https://check-cong-lms.vercel.app/favicon.ico" />
-        <link rel="apple-touch-icon" href="https://check-cong-lms.vercel.app/favicon.ico" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} ${spaceGrotesk.variable} antialiased`}

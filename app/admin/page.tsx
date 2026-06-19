@@ -9,6 +9,12 @@ import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Input } from '@/app/components/ui/input';
 import type { AdminDashboardData } from '@/lib/adminStats';
+import {
+  DEFAULT_CONTENT_SETTINGS,
+  getContentSettings,
+  saveContentSettings,
+  type ContentSettings,
+} from '@/lib/contentSettings';
 import { cn } from '@/lib/utils';
 import {
   Activity,
@@ -25,7 +31,6 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const ADMIN_PASSWORD = 'MindX@2024';
 const APPSCRIPT_URL = process.env.NEXT_PUBLIC_APPSCRIPT_URL || '';
 
 export default function AdminPage() {
@@ -34,32 +39,46 @@ export default function AdminPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState<AdminDashboardData | null>(null);
+  const [contentSettings, setContentSettings] = useState<ContentSettings>(DEFAULT_CONTENT_SETTINGS);
+  const [contentSaved, setContentSaved] = useState(false);
 
   useEffect(() => {
-    // Check if already authenticated
-    const auth = sessionStorage.getItem('admin_authenticated');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-      loadDashboardData();
-    }
+    setContentSettings(getContentSettings());
+    fetch('/api/admin/status')
+      .then((response) => response.json())
+      .then(({ authenticated }) => {
+        setIsAuthenticated(Boolean(authenticated));
+        if (authenticated) loadDashboardData();
+      });
   }, []);
 
-  const handleLogin = () => {
-    if (password === ADMIN_PASSWORD) {
+  const handleLogin = async () => {
+    const response = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    if (response.ok) {
       setIsAuthenticated(true);
-      sessionStorage.setItem('admin_authenticated', 'true');
       setError('');
       loadDashboardData();
     } else {
-      setError('Mật khẩu không đúng!');
+      const result = await response.json().catch(() => ({}));
+      setError(result.error || 'Mật khẩu không đúng!');
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch('/api/admin/logout', { method: 'POST' });
     setIsAuthenticated(false);
-    sessionStorage.removeItem('admin_authenticated');
     setPassword('');
     setDashboardData(null);
+  };
+
+  const handleSaveContent = () => {
+    saveContentSettings(contentSettings);
+    setContentSaved(true);
+    window.setTimeout(() => setContentSaved(false), 2500);
   };
 
   const loadDashboardData = async () => {
@@ -131,23 +150,23 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-[#1e293b] border-white/10 shadow-2xl">
-          <CardHeader className="text-center border-b border-white/10">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-white border-sky-100 shadow-2xl">
+          <CardHeader className="text-center border-b border-slate-100">
             <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center">
               <BarChart3 className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl font-bold gradient-text">
               Admin Dashboard
             </CardTitle>
-            <CardDescription className="text-[#94a3b8] mt-2">
+            <CardDescription className="text-slate-600 mt-2">
               Nhập mật khẩu để truy cập thống kê
             </CardDescription>
           </CardHeader>
 
           <CardContent className="pt-6 space-y-4">
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-[#f8fafc]">
+              <label htmlFor="password" className="text-sm font-medium text-slate-800">
                 Mật khẩu
               </label>
               <Input
@@ -161,7 +180,7 @@ export default function AdminPage() {
                 onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
                 placeholder="Nhập mật khẩu admin..."
                 className={cn(
-                  "h-12 bg-[#0f172a] border-white/10 text-white",
+                  "h-12 bg-white border-slate-200 text-slate-900",
                   error && "border-red-500"
                 )}
                 autoFocus
@@ -188,7 +207,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -197,7 +216,7 @@ export default function AdminPage() {
               <BarChart3 className="h-8 w-8" />
               Admin Dashboard
             </h1>
-            <p className="text-[#94a3b8] mt-1">
+            <p className="text-slate-600 mt-1">
               <span className="text-xs text-green-400">☁️ Real-time từ Google Sheets</span>
             </p>
           </div>
@@ -221,6 +240,45 @@ export default function AdminPage() {
             </Button>
           </div>
         </div>
+
+        <Card className="border-sky-100 bg-white shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-slate-900">Nội dung Coding</CardTitle>
+            <CardDescription className="text-slate-600">
+              Cập nhật đường dẫn giáo trình và tài liệu nhận xét Zalo trên trình duyệt hiện tại.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Giáo trình Coding</label>
+              <Input
+                value={contentSettings.curriculumUrl}
+                onChange={(event) =>
+                  setContentSettings((current) => ({ ...current, curriculumUrl: event.target.value }))
+                }
+                className="bg-white text-slate-900"
+                placeholder="https://..."
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Tài liệu nhận xét Zalo</label>
+              <Input
+                value={contentSettings.zaloCommentsUrl}
+                onChange={(event) =>
+                  setContentSettings((current) => ({ ...current, zaloCommentsUrl: event.target.value }))
+                }
+                className="bg-white text-slate-900"
+                placeholder="Dán link Google Docs/Sheets hoặc SharePoint"
+              />
+            </div>
+            <Button
+              onClick={handleSaveContent}
+              className="bg-gradient-to-r from-sky-600 to-cyan-500 text-white"
+            >
+              {contentSaved ? '✓ Đã lưu' : 'Lưu nội dung'}
+            </Button>
+          </CardContent>
+        </Card>
 
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
