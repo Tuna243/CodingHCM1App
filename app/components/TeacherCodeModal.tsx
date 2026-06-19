@@ -58,7 +58,7 @@ export default function TeacherCodeModal({ onSubmit }: TeacherCodeModalProps) {
             Coding HCM1
           </CardTitle>
           <CardDescription className="mt-2 text-slate-600">
-            Chọn giáo viên Coding đang hoạt động tại bốn cơ sở HCM1.
+            Chọn thông tin tên của bạn để Leader có thể thống kê lưu lượng truy cập.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 pt-6">
