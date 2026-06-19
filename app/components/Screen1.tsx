@@ -4,11 +4,33 @@ import {
   CONTENT_SETTINGS_EVENT,
   getContentSettings,
 } from '@/lib/contentSettings';
-import { BookOpen, ExternalLink, FileSpreadsheet, QrCode } from 'lucide-react';
+import {
+  BookOpen,
+  CircleHelp,
+  ExternalLink,
+  FileSpreadsheet,
+  MessageSquareWarning,
+  QrCode,
+} from 'lucide-react';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+
+const CURRICULUM_GUIDES = [
+  {
+    title: 'Hướng dẫn truy cập giáo trình giảng dạy',
+    description: 'Xem quy trình mở và sử dụng đúng kho giáo trình dành cho giáo viên.',
+    url: 'https://cxohok12.gitbook.io/quy-trinh-quy-dinh-danh-cho-giao-vien/iv.-quy-trinh-quy-dinh-chung/huong-dan-truy-cap-giao-trinh-giang-day',
+    icon: CircleHelp,
+  },
+  {
+    title: 'Hướng dẫn phản ánh giáo trình giảng dạy',
+    description: 'Gửi phản ánh khi phát hiện nội dung học liệu cần kiểm tra hoặc điều chỉnh.',
+    url: 'https://cxohok12.gitbook.io/quy-trinh-quy-dinh-danh-cho-giao-vien/vi.-quy-trinh-van-hanh-lop-hoc/quy-trinh-mot-buoi-giang-day/huong-dan-phan-anh-giao-trinh-giang-day#quy-trinh',
+    icon: MessageSquareWarning,
+  },
+] as const;
 
 export default function Screen1() {
   const [curriculumUrl, setCurriculumUrl] = useState('');
@@ -103,6 +125,41 @@ export default function Screen1() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="glass-card mx-auto w-full max-w-5xl">
+        <CardHeader>
+          <CardTitle className="section-title text-slate-900">
+            Hướng dẫn sử dụng giáo trình
+          </CardTitle>
+          <CardDescription className="text-slate-600">
+            Quy trình chính thức dành cho giáo viên Coding.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-2">
+          {CURRICULUM_GUIDES.map(({ title, description, url, icon: Icon }) => (
+            <a
+              key={url}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex min-h-36 items-start gap-4 rounded-2xl border border-sky-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md"
+            >
+              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-sky-100 text-sky-700 transition group-hover:bg-sky-600 group-hover:text-white">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="min-w-0">
+                <span className="flex items-start justify-between gap-3">
+                  <span className="font-semibold leading-snug text-slate-900">{title}</span>
+                  <ExternalLink className="mt-0.5 h-4 w-4 flex-none text-sky-600" />
+                </span>
+                <span className="mt-2 block text-sm leading-relaxed text-slate-600">
+                  {description}
+                </span>
+              </span>
+            </a>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }
