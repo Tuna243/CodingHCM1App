@@ -15,7 +15,6 @@ import {
   LogOut,
   RefreshCw,
   School,
-  UserRound,
   X,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -510,11 +509,6 @@ export default function ScreenLms() {
 
           <div className="space-y-4">
             {[
-              {
-                icon: UserRound,
-                title: 'Chỉ dữ liệu của bạn',
-                text: 'Server nhận diện tài khoản LMS và loại bỏ mọi lớp không có bạn trong danh sách giáo viên.',
-              },
               {
                 icon: Clock3,
                 title: 'Ưu tiên đúng hạn',
