@@ -506,22 +506,6 @@ export default function ScreenLms() {
               </Button>
             </CardContent>
           </Card>
-
-          <div className="space-y-4">
-            {[
-              {
-                icon: Clock3,
-                title: 'Ưu tiên đúng hạn',
-                text: 'Buổi checkpoint và cuối khóa vẫn cần đủ nhận xét học viên và đánh giá quá trình. Hạn xử lý: buổi 5, 9, 14 là 48 giờ; các buổi còn lại là 24 giờ.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-[#c9ded7] bg-white p-4 shadow-sm">
-                <item.icon className="h-5 w-5 text-[#1d584e]" />
-                <p className="mt-3 font-bold text-[#1e293b]">{item.title}</p>
-                <p className="mt-1 text-sm text-[#3a7a6e]">{item.text}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     );
