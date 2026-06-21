@@ -5,7 +5,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Building2, Calendar, DollarSign, FileText, Link as LinkIcon, X } from 'lucide-react';
+import { Building2, DollarSign, FileText, Link as LinkIcon, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from "./ui/button";
 
@@ -32,31 +32,11 @@ const navSections: NavSection[] = [
     ]
   },
   {
-    title: 'Lịch hàng tuần',
-    items: [
-      {
-        url: 'https://docs.google.com/spreadsheets/d/1UMYNuY1Qetp89hIVjYYG5Zc8MW2yM8e8DMrjy9mzSpw/edit?gid=1016993676#gid=1016993676',
-        title: 'Lịch HCM1',
-        icon: Calendar
-      },
-      {
-        url: 'https://docs.google.com/spreadsheets/d/1oDwUvol9yS7BrNfdVcq219Gop9ku09gpn-7acF58Tz8/edit?gid=1016993676#gid=1016993676',
-        title: 'Lịch HCM4',
-        icon: Calendar
-      }
-    ]
-  },
-  {
     title: 'Lịch cơ sở',
     items: [
       {
         url: 'https://docs.google.com/spreadsheets/d/1qjqo6nrQKegFPzu4t8D4W2Q5-fJ829ghNvTDWjRD1r4/edit?gid=0#gid=0',
         title: 'Cơ sở HCM1',
-        icon: Building2
-      },
-      {
-        url: 'https://docs.google.com/spreadsheets/d/1DRASt1UR8drUTLH-WGvguJRWudq3Z02eicwxxmPphek/edit?gid=0#gid=0',
-        title: 'Cơ sở HCM4',
         icon: Building2
       }
     ]
@@ -77,7 +57,7 @@ export default function Screen6() {
   const [activeUrl, setActiveUrl] = useState<string | null>(null);
   const [activeTitle, setActiveTitle] = useState<string>('');
   const [showIframe, setShowIframe] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const navItems = navSections.flatMap((section) => section.items);
 
   // Optimize URL for Google Sheets/Forms
   const getOptimizedUrl = (url: string) => {
@@ -110,7 +90,6 @@ export default function Screen6() {
   }, []);
 
   const openLink = (url: string, title: string) => {
-    setIsLoaded(false);
     const optimizedUrl = getOptimizedUrl(url);
     setActiveUrl(optimizedUrl);
     setActiveTitle(title);
@@ -121,31 +100,24 @@ export default function Screen6() {
     setShowIframe(false);
     setActiveUrl(null);
     setActiveTitle('');
-    setIsLoaded(false);
   };
 
   return (
-    <div 
-      className="relative flex w-full overflow-hidden"
-      style={{
-        height: '100vh',
-        width: '100%'
-      }}
-    >
+    <div className="relative flex h-[calc(100dvh-60px)] w-full min-w-0 flex-col overflow-hidden md:h-screen md:flex-row">
       {/* Sidebar */}
-      <div className="w-52 bg-[rgba(15,23,42,0.95)] backdrop-blur-md border-r border-white/10 overflow-y-auto flex-shrink-0" style={{ height: '100vh' }}>
+      <div className="hidden h-screen w-52 flex-shrink-0 overflow-y-auto border-r border-[#c9ded7] bg-white/95 backdrop-blur-md md:block">
         <div className="p-4">
           {/* Header */}
-          <div className="mb-6 pb-4 border-b border-white/10">
+          <div className="mb-6 pb-4 border-b border-[#c9ded7]">
             <div className="flex items-center gap-2 mb-2">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30">
-                <LinkIcon className="h-4 w-4 text-[#a5b4fc]" />
+              <div className="p-2 rounded-lg bg-[#eef7f3] border border-[#c9ded7]">
+                <LinkIcon className="h-4 w-4 text-[#1d584e]" />
               </div>
-              <h1 className="text-base font-bold bg-gradient-to-r from-[#a5b4fc] to-[#c7d2fe] bg-clip-text text-transparent">
+              <h1 className="text-base font-bold text-[#1d584e]">
                 Link Mentor
               </h1>
             </div>
-            <p className="text-xs text-[#94a3b8] ml-12 leading-relaxed">
+            <p className="text-xs text-[#3a7a6e] ml-12 leading-relaxed">
               Truy cập nhanh các liên kết
             </p>
           </div>
@@ -154,11 +126,11 @@ export default function Screen6() {
             {navSections.map((section, sectionIndex) => (
               <div key={sectionIndex} className="space-y-1.5">
                 <div className="flex items-center gap-2 px-2 mb-2">
-                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent"></div>
-                  <h3 className="text-xs font-semibold text-[#a5b4fc] uppercase tracking-wider">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#6cc3a0] to-transparent"></div>
+                  <h3 className="text-xs font-semibold text-[#1d584e] uppercase tracking-wider">
                     {section.title}
                   </h3>
-                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent"></div>
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#6cc3a0] to-transparent"></div>
                 </div>
                 {section.items.map((item, itemIndex) => {
                   const Icon = item.icon;
@@ -168,13 +140,13 @@ export default function Screen6() {
                       onClick={() => openLink(item.url, item.title)}
                       className={cn(
                         "w-full flex items-center gap-2 px-2 py-1.5 rounded border transition-all",
-                        "bg-[rgba(255,255,255,0.05)] border-white/10",
-                        "hover:bg-[rgba(99,102,241,0.1)] hover:border-indigo-500/30 hover:translate-x-1",
-                        activeUrl === item.url && "bg-[rgba(99,102,241,0.2)] border-indigo-500/50"
+                        "bg-white border-[#c9ded7]",
+                        "hover:bg-[#eef7f3] hover:border-[#6cc3a0] hover:translate-x-1",
+                        activeUrl === item.url && "bg-[#eef7f3] border-[#3a7a6e]"
                       )}
                     >
-                      <Icon className="h-3.5 w-3.5 text-[#a5b4fc] flex-shrink-0" />
-                      <span className="font-medium text-xs text-[#f8fafc] truncate">
+                      <Icon className="h-3.5 w-3.5 text-[#1d584e] flex-shrink-0" />
+                      <span className="font-medium text-xs text-[#1e293b] truncate">
                         {item.title}
                       </span>
                     </button>
@@ -186,16 +158,47 @@ export default function Screen6() {
         </div>
       </div>
 
+      {/* Mobile link selector */}
+      <div className="shrink-0 border-b border-[#c9ded7] bg-white px-3 py-3 md:hidden">
+        <div className="mb-2 flex items-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#c9ded7] bg-[#eef7f3]">
+            <LinkIcon className="h-4 w-4 text-[#1d584e]" />
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-sm font-bold text-[#1d584e]">Link Mentor</h1>
+            <p className="text-xs text-[#3a7a6e]">Chọn liên kết cần mở</p>
+          </div>
+        </div>
+        <label className="sr-only" htmlFor="mentor-link-select">Chọn liên kết Mentor</label>
+        <select
+          id="mentor-link-select"
+          value={activeTitle}
+          onChange={(event) => {
+            const item = navItems.find((candidate) => candidate.title === event.target.value);
+            if (item) openLink(item.url, item.title);
+          }}
+          className="min-h-11 w-full rounded-xl border border-[#c9ded7] bg-white px-3 text-sm font-semibold text-[#1e293b] outline-none focus:border-[#1d584e] focus:ring-2 focus:ring-[#6cc3a0]/30"
+        >
+          {navSections.map((section) => (
+            <optgroup key={section.title} label={section.title}>
+              {section.items.map((item) => (
+                <option key={item.title} value={item.title}>{item.title}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+
       {/* Main Content Area */}
-      <div className="flex-1 relative flex flex-col overflow-hidden" style={{ height: '100vh' }}>
+      <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         {!showIframe ? (
           <div className="flex items-center justify-center flex-1" style={{ height: '100%' }}>
             <div className="text-center">
-              <LinkIcon className="h-16 w-16 text-[#a5b4fc] mx-auto mb-4 opacity-50" />
-              <h2 className="text-xl font-semibold text-[#cbd5e1] mb-2">
+              <LinkIcon className="h-16 w-16 text-[#6cc3a0] mx-auto mb-4 opacity-70" />
+              <h2 className="text-xl font-semibold text-[#1e293b] mb-2">
                 Chọn một liên kết từ menu bên trái
               </h2>
-              <p className="text-sm text-[#94a3b8]">
+              <p className="text-sm text-[#3a7a6e]">
                 Để xem nội dung
               </p>
             </div>
@@ -203,15 +206,15 @@ export default function Screen6() {
         ) : (
           <div className="flex flex-col bg-white flex-1" style={{ height: '100%' }}>
             {/* Iframe Header */}
-            <div className="bg-[rgba(15,23,42,0.9)] backdrop-blur-md px-4 py-2.5 flex items-center justify-between border-b border-white/10 flex-shrink-0">
-              <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+            <div className="flex flex-shrink-0 items-center justify-between gap-2 border-b border-[#3a7a6e] bg-[#1d584e] px-3 py-2.5 backdrop-blur-md sm:px-4">
+              <h2 className="flex min-w-0 items-center gap-2 truncate text-sm font-semibold text-white">
                 <LinkIcon className="h-4 w-4" />
-                {activeTitle}
+                <span className="truncate">{activeTitle}</span>
               </h2>
               <Button
                 onClick={closeIframe}
                 size="sm"
-                className="bg-white/10 hover:bg-white/20 text-white border-white/20 h-7 px-2 text-xs"
+                className="h-8 shrink-0 border border-white/20 bg-white/10 px-2 text-xs text-white hover:bg-[#3a7a6e]"
               >
                 <X className="h-3 w-3 mr-1" />
                 Đóng
@@ -219,7 +222,7 @@ export default function Screen6() {
             </div>
 
             {/* Iframe container */}
-            <div className="flex-1 relative overflow-hidden bg-white" style={{ height: 'calc(100vh - 48px)' }}>
+            <div className="relative min-h-0 flex-1 overflow-hidden bg-white">
               {activeUrl && (
                 <iframe
                   key={activeUrl}

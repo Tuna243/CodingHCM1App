@@ -12,8 +12,9 @@ import {
     ExternalLink, FileText,
     PlayCircle,
     Star,
-    Users, Video,
+    Video,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 
 // ─── NavBtn — nút điều hướng tới màn hình khác trong app ────────────────────
@@ -29,7 +30,7 @@ function NavBtn({ screen, label, onNavigate }: { screen: string; label: string; 
 }
 
 // ─── Resource Card (Link dạng card) ──────────────────────────────────────────
-type RC = { href: string; icon: React.ElementType; label: string; desc?: string; color?: string };
+type RC = { href: string; icon: LucideIcon; label: string; desc?: string; color?: string };
 function ResourceCard({ href, icon: Icon, label, desc, color = 'blue' }: RC) {
     const colors: Record<string, string> = {
         blue: 'bg-sky-50 border-sky-200 text-sky-800 hover:border-sky-300 hover:bg-sky-100',
@@ -262,10 +263,10 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                     <button key={p.id} onClick={() => setPhase(p.id)}
                         className={`min-w-0 rounded-xl border px-3 py-3 text-left transition-all md:px-4
               ${phase === p.id
-                                ? 'border-sky-600 bg-gradient-to-r from-sky-600 to-cyan-500 text-white shadow-md'
+                                ? 'roadmap-phase-active border-sky-600 bg-gradient-to-r from-sky-600 to-cyan-500 text-white shadow-md'
                                 : 'border-slate-200 bg-white text-slate-600 hover:border-sky-200 hover:bg-sky-50 hover:text-sky-800'}`}>
                         <div className="truncate text-sm font-bold md:text-base">{p.emoji} {p.label}</div>
-                        <div className={`mt-1 hidden text-xs leading-snug sm:block ${phase === p.id ? 'text-sky-50' : 'text-slate-500'}`}>{p.sub}</div>
+                        <div className={`mt-1 hidden text-xs leading-snug sm:block ${phase === p.id ? 'text-white' : 'text-slate-500'}`}>{p.sub}</div>
                     </button>
                 ))}
             </div>
@@ -391,30 +392,39 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-3">Tài liệu buổi trải nghiệm</p>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-1">
                             <ResourceCard href="https://docs.google.com/presentation/d/1RCD9a3IATcrGwY2AQObbqBxRknhQuIu5/edit" icon={Video} label="Slide quy trình Trial" desc="Đọc kỹ để nắm rõ quy trình" color="violet" />
-                            <ResourceCard href="https://drive.google.com/drive/folders/1bhaEu1lCv-30FloGSFY8tZhEFK1cYFCm" icon={BookOpen} label="Giáo trình mới" desc="Dùng để trình chiếu trong buổi học" color="emerald" />
-                            <ResourceCard href="https://docs.google.com/spreadsheets/d/1VxhunGGaUk2schjQzF0vxwquNWdEdR42z6DnDFL2McY/edit" icon={BookOpen} label="Giáo trình cũ" desc="Dùng để trình chiếu trong buổi học" color="slate" />
-                        </div>
-
-                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-4">Tài liệu thiết bị & kỹ thuật</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
-                            <ResourceCard href="https://drive.google.com/file/d/1pkqQIScGELY2ygX2THWFQNJsC5PGXTBJ/view?usp=drive_link" icon={BookOpen} label="Tài liệu VEX GO" desc="Tìm hiểu thiết bị" color="blue" />
-                            <ResourceCard href="https://drive.google.com/file/d/1yzkuIgLwzMJmXgwUO3f0uLn5cViShxCT/view?usp=sharing" icon={BookOpen} label="Tài liệu VEX IQ" desc="Tìm hiểu thiết bị" color="blue" />
-                            <ResourceCard href="https://spike.legoeducation.com/essential/start/" icon={BookOpen} label="Tài liệu SPIKE Essential" desc="Tìm hiểu thiết bị" color="amber" />
-                            <ResourceCard href="https://docs.google.com/spreadsheets/d/1g-vaMbXvdEk25TVvgoMUi19vrJabdkLCOsfDzueqWPY/edit?gid=1780248855#gid=1780248855" icon={FileText} label="Lỗi kỹ thuật robot" desc="Lỗi thường gặp và cách xử lý" color="red" />
+                            <ResourceCard href="https://mindxcom-my.sharepoint.com/:x:/r/personal/rdk12_drive_mindx_com_vn/_layouts/15/Doc.aspx?sourcedoc=%7B0B16E25A-AA34-4E96-96C9-447E81C6CF77%7D&file=%5BR%26D%20K12%20-%20CMS%5D%20T%E1%BB%95ng%20h%E1%BB%A3p%20file%20l%C6%B0u%20tr%E1%BB%AF%20h%E1%BB%8Dc%20li%E1%BB%87u.xlsx&action=default&mobileredirect=true" icon={BookOpen} label="Giáo trình mới" desc="Dùng để trình chiếu trong buổi học" color="emerald" />
+                            <ResourceCard href="https://docs.google.com/spreadsheets/d/1VxhunGGaUk2schjQzF0vxwquNWdEdR42z6DnDFL2McY/edit" icon={BookOpen} label="Giáo trình cũ" desc="Dùng để học tiền duyệt giảng, trước khi có tài khoản truy cập giáo trình chính thức" color="slate" />
                         </div>
                     </Step>
 
-                    <Step n={3} title="Duyệt giảng với Leader → Được cấp tài khoản" last>
+                    <Step n={3} title="Duyệt giảng với Leader → Được cấp tài khoản">
                         <Callout icon="💡" text="Chủ động nhắn Leader thời gian rảnh để được sắp xếp buổi duyệt!" />
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-1">Leader kiểm tra 3 mục</p>
                         <Check items={[
                             'Trả lời câu hỏi về những gì đã quan sát trong lớp học',
                             'Thực hành lại đầy đủ 1 ca trải nghiệm',
-                            'Giải thích sự khác nhau giữa các câu lệnh lập trình từng khóa RBT',
+                            'Giải thích sự khác nhau giữa các câu lệnh lập trình từng khóa Coding',
                         ]} />
-                        <ResourceCard href="https://apprbt.vercel.app/" icon={Star} label="Kiểm tra câu lệnh RBT" desc="Ôn tập tại mục 1 — dùng cho mục kiểm tra thứ 3" color="amber" />
+                        <Callout
+                            icon="!"
+                            text="Lưu ý: Mong muốn giảng dạy khối nào sẽ cần duyệt giảng với Leader của khối đó. Ví dụ: nếu muốn dạy thêm Robotics, giáo viên cần duyệt giảng với Leader Robotics."
+                            color="blue"
+                        />
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-3">Rubric đánh giá — 10 tiêu chí (thang 1→5)</p>
                         <RubricTable groupLabel="10 tiêu chí duyệt giảng lần 1" color="indigo" rows={RUBRIC_10} />
+                    </Step>
+
+                    <Step n={4} title="Đăng ký thông tin giáo viên với HR" last>
+                        <p className="text-sm leading-relaxed text-slate-600">
+                            Hoàn thành biểu mẫu thông tin giáo viên sau khi duyệt giảng để HR tiếp nhận và xử lý hồ sơ.
+                        </p>
+                        <ResourceCard
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSe-Ad6CpCq5I-o3qRTzmGnslAhk_IcvaX1rlNTo2uI8LDJ7nQ/viewform"
+                            icon={FileText}
+                            label="Mở form đăng ký thông tin giáo viên"
+                            desc="Giáo viên cung cấp đầy đủ các thông tin như CCCD, số tài khoản để nhà trường sử dụng làm hợp đồng dịch vụ và phiếu thanh toán thù lao"
+                            color="emerald"
+                        />
                     </Step>
                 </div>
             )}
@@ -422,16 +432,29 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
             {/* ══ PHASE 2 ══════════════════════════════════════════════════════════ */}
             {phase === 'p2' && (
                 <div className="space-y-1">
-                    <Step n={1} title="Liên hệ TC (Teacher Coordinator)">
-                        <p className="text-sm text-slate-400">Nhắn tin giới thiệu tới <a href="https://zalo.me/0385914843" target="_blank" rel="noopener noreferrer" className="text-blue-400 underline hover:text-blue-300 font-medium">Zalo 0385914843</a>:</p>
+                    <Step n={1} title="Làm kiểm tra Coding Technical đầu vào">
+                        <Callout
+                            icon="!"
+                            text="Đề kiểm tra gồm 3 môn: Scratch, GameMaker và Web. Hoàn thành bài kiểm tra trước khi liên hệ Teacher Coordinator."
+                            color="blue"
+                        />
+                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Tài liệu tham khảo</p>
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                            <ResourceCard href="https://scratch-tutorial.readthedocs.io/fr/latest/1_intro/intro.html" icon={BookOpen} label="Scratch" desc="Tài liệu ôn tập" color="amber" />
+                            <ResourceCard href="https://manual.gamemaker.io/monthly/en/#t=Content.htm" icon={BookOpen} label="GameMaker" desc="Tài liệu ôn tập" color="blue" />
+                            <ResourceCard href="https://www.w3schools.com/js/default.asp" icon={BookOpen} label="Web / JavaScript" desc="Tài liệu ôn tập" color="emerald" />
+                        </div>
+                        <ResourceCard href="https://timer.addonforge.com/timer/1FAIpQLSfTOu3XwojvVZF1wgVLNwNMHgDqr49FdXlpZu-X79UXyAcZ6A" icon={ClipboardCheck} label="Bắt đầu bài kiểm tra Technical" desc="Mở đề kiểm tra Coding đầu vào" color="violet" />
+                    </Step>
+
+                    <Step n={2} title="Liên hệ TC (Teacher Coordinator)">
+                        <p className="text-sm text-slate-600">Nhắn tin giới thiệu tới Teacher Coordinator qua <a href="https://zalo.me/0385914843" target="_blank" rel="noopener noreferrer" className="font-medium text-sky-700 underline hover:text-sky-800">Zalo 0385914843</a>:</p>
                         <div className="bg-slate-800/60 border border-white/10 rounded-xl p-4 font-mono text-sm text-slate-300 leading-relaxed">
-                            "Em tên [Tên], mã LMS [mã], đang là GV RBT khu vực [HCM1/HCM4].
-                            Sau duyệt giảng với leader, em có thể tham gia trial các level:
-                            <span className="text-indigo-300 font-bold"> PRE / ARM / SEMI / KIND 4+</span>"
+                            &quot;Em tên [Tên], mã LMS [mã], ứng tuyển giảng dạy bộ môn Coding và đã hoàn thành bài kiểm tra Technical đầu vào.&quot;
                         </div>
                     </Step>
 
-                    <Step n={2} title="3 việc cần làm mỗi tuần">
+                    <Step n={3} title="3 việc cần làm mỗi tuần">
                         <div className="space-y-3">
                             {[
                                 {
@@ -469,7 +492,7 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                         <ResourceCard href="https://cxohok12.gitbook.io/quy-trinh-quy-dinh-danh-cho-giao-vien" icon={BookOpen} label="📖 Quy trình quy định dành cho GV" desc="Đọc đầy đủ — quan trọng!" color="violet" />
                     </Step>
 
-                    <Step n={3} title="Đầu việc TA có thể tham gia">
+                    <Step n={4} title="Đầu việc TA có thể tham gia">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="rounded-xl bg-emerald-900/15 border border-emerald-500/20 p-4">
                                 <p className="font-bold text-emerald-300 mb-1.5">🧑‍💻 Trợ giảng lớp học</p>
@@ -490,18 +513,24 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                         </div>
                     </Step>
 
-                    <Step n={4} title="Duyệt giảng lên LEC (Giáo viên đứng lớp)" last>
+                    <Step n={5} title="Duyệt giảng lên LEC (Giáo viên đứng lớp)" last>
                         <Callout icon="🎯" text="Mục tiêu giai đoạn TA: chuẩn bị đủ kiến thức để được duyệt giảng lên LEC!" />
                         <Callout icon="⏱️" text="Buổi duyệt giảng kéo dài 15–20 phút — thực hành dạy thử 1 phần bài học trước BGK/Leader." color="blue" />
                         <Check items={[
                             'Đăng ký vào group duyệt giảng trên Zalo',
-                            'Soạn slide theo mẫu (xem slide mẫu K12 hoặc 4+)',
+                            'Hoàn thành tập huấn sư phạm trước khi duyệt giảng',
+                            'Soạn slide theo mẫu K12',
                             'Thực hành dạy nhiều lần trước khi duyệt',
                         ]} />
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                            <ResourceCard href="https://zalo.me/g/xqgakm321" icon={Users} label="Group đăng ký duyệt giảng" desc="Đăng ký lịch duyệt" color="emerald" />
+                            <ResourceCard
+                                href="https://cxohok12.gitbook.io/quy-trinh-quy-dinh-danh-cho-giao-vien/iv.-quy-trinh-quy-dinh-chung/teaching-roadmap/quy-trinh-quy-dinh-dao-tao-dau-vao/tap-huan-su-pham"
+                                icon={BookOpen}
+                                label="Tập huấn sư phạm"
+                                desc="Bài tập E-learning sư phạm tiền duyệt giảng"
+                                color="emerald"
+                            />
                             <ResourceCard href="https://drive.google.com/file/d/1At4vzPyq1JZJpbcnBTaulzkMv12moh--/view" icon={Video} label="Slide mẫu K12" desc="Dành cho khoá K12" color="blue" />
-                            <ResourceCard href="https://drive.google.com/file/d/11ej6lpoCJ1cJNYhr-TGwUtXgdh1jg5Pq/view" icon={Video} label="Slide mẫu 4+" desc="Dành cho khoá 4+" color="blue" />
                         </div>
 
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-3">Rubric đánh giá LEC — 26 tiêu chí (thang 1→5)</p>
@@ -526,119 +555,65 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                         ]} />
                     </Step>
 
-                    <Step n={2} title="Quy trình & Timeline một buổi học (1.5h)">
+                    <Step n={2} title="Quy trình & Timeline một buổi học (2h)">
                         <div className="data-table-shell mt-2">
                             <table className="app-table timeline-table">
                                 <thead>
                                     <tr>
-                                        <th className="w-1/4">Mốc thời gian / Hoạt động</th>
                                         <th className="w-28">Thời gian</th>
-                                        <th>Lưu ý / Hướng dẫn</th>
+                                        <th className="w-1/4">Bước</th>
+                                        <th>Nội dung</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr className="table-section">
-                                        <td colSpan={3}>Trước buổi học</td>
+                                        <td rowSpan={3}>Trước</td>
+                                        <td>Chấm bài tập về nhà</td>
+                                        <td>Chấm bài và nhắc nhở học viên, phụ huynh hoàn thành đầy đủ bài tập được giao.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Chuẩn bị bộ KIT</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">15 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            Liên hệ với BU để lấy bộ KIT, kiểm tra thiếu các mảnh ghép lớn và phản hồi lại để được xác nhận.<br/>
-                                            Kiểm tra số lượng pin và tablet đầy đủ, thiếu hoặc hết pin liên hệ ngay với CS.
-                                        </td>
-                                    </tr>
-                                    <tr className="table-section">
-                                        <td colSpan={3}>Trong buổi học</td>
+                                        <td>Xem trước nội dung môn học</td>
+                                        <td>Chủ động xem trước khóa học và bài học để nắm tổng quan, đầu ra, nội dung và kiến thức cần truyền đạt.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Ổn định học viên</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">5 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            Ổn định trật tự, nhắc lại kiến thức cũ, giới thiệu qua nội dung hôm nay.<br/>
-                                            <em className="text-slate-400">&quot;Hôm trước lớp mình đã học mô hình gì? Hôm nay sẽ tiếp tục với chủ đề...&quot;</em>
-                                        </td>
+                                        <td>Tham gia lớp học</td>
+                                        <td>Sắp xếp lịch trình để có mặt trước giờ dạy tối thiểu 10 phút, bảo đảm thời gian chuẩn bị giáo trình và tài liệu.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Lắp ráp mô hình</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">25-30 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            <strong>Không vượt quá 50 phút</strong>. GV trình chiếu slide lắp ráp trên TV.<br/>
-                                            Chia nhóm 2 bạn (1 người lấy mảnh, 1 người lắp). Đặt đồng hồ đếm ngược, quy định 2/3 nhóm xong để chuyển bước kế tiếp.
-                                        </td>
+                                        <td rowSpan={4}>Trong</td>
+                                        <td>Gửi đánh giá khảo sát học viên</td>
+                                        <td>Gửi khảo sát đánh giá cho học viên vào buổi 4 và buổi 8 của học phần.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Lập trình</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">25-30 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            Ra đề bài thực tế: <em>&quot;Báo thấy màu xanh dương dừng để uống nước, thấy con mồi đỏ tăng tốc&quot;</em>... Đi xung quanh quan sát học sinh làm có đúng thời lượng không.
-                                        </td>
+                                        <td>Sửa bài tập về nhà</td>
+                                        <td>Hướng dẫn học viên sửa bài tập về nhà và giải đáp các nội dung còn vướng mắc.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Hoạt động thêm</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">20 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            Cho HS lắp ráp sáng tạo hoặc thi đấu. Nêu cao tinh thần đồng đội, tạo hứng thú, khuyến khích HS thuyết trình ý tưởng.
-                                        </td>
+                                        <td>Giảng dạy</td>
+                                        <td>Giảng dạy nội dung theo giáo trình và Teaching Guide.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Tháo mô hình</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">15 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            Chụp hình lưu niệm. Hướng dẫn các bạn tự tháo và nhắc nhở cất chốt để đúng vị trí. Kiểm tra dưới bàn.
-                                        </td>
+                                        <td>Tổng kết nội dung buổi học</td>
+                                        <td>Ôn lại kiến thức chính, kiểm tra mức độ tiếp thu và hướng dẫn nhiệm vụ tiếp theo.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Củng cố kiến thức</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">5-10 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            Hỏi đáp tổng kết: <em>&quot;Hôm nay học chủ đề gì? Lắp chi tiết gì đặc biệt? Khối lệnh nào mới?&quot;</em> Nhắc cắt ghế trước khi về.
-                                        </td>
-                                    </tr>
-                                    <tr className="table-section">
-                                        <td colSpan={3}>Sau buổi học</td>
+                                        <td rowSpan={2}>Sau</td>
+                                        <td>Trao đổi vấn đề</td>
+                                        <td>Thông báo lại với cấp quản lý và vận hành các vấn đề quan trọng để phối hợp xử lý, nếu có.</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-4 py-3 font-semibold text-white align-top">Kiểm tra & Nhận xét</td>
-                                        <td className="px-4 py-3 text-slate-400 align-top">1.5 phút</td>
-                                        <td className="px-4 py-3 leading-relaxed">
-                                            <ul className="list-disc pl-4 space-y-1">
-                                                <li>Check phòng (lau bảng, tắt điện, cất đồ).</li>
-                                                <li><strong>Nhận xét LMS:</strong> Nhận xét ngắn gọn các buổi học thường. Buổi 4, 8 nhận xét điểm chi tiết 3 tiêu chí: <strong>Lắp ráp, Lập trình, Thái độ</strong>. Deadline (b4,8,14): 72h, các buổi còn lại: 48h.</li>
-                                                <li><strong>Gửi Zalo Group:</strong> Gồm ND bài giảng, HD hoạt động, ảnh chụp, Homework, Slide. Không gửi 12h-14h &amp; sau 20h30.</li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colSpan={3} className="px-4 pb-4 border-t border-white/5 pt-3">
-                                            <div className="rounded-xl overflow-hidden border border-white/10 bg-black/40 w-full">
-                                                <video 
-                                                    src="/img/video-huong-dan-nhan-xet.mp4" 
-                                                    controls 
-                                                    preload="metadata"
-                                                    className="w-full h-auto aspect-video bg-black/50"
-                                                />
-                                                <div className="p-3 border-t border-white/10">
-                                                    <h4 className="font-semibold text-blue-300 text-sm flex items-center gap-2"><PlayCircle className="w-4 h-4"/> HD nhận xét trên Zalo/LMS</h4>
-                                                    <p className="text-xs text-slate-400 mt-1">Form nhận xét nhanh tại mục 4 App</p>
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                                                <div className="text-xs text-slate-400 p-3 bg-indigo-900/20 rounded-lg border border-indigo-500/10">
-                                                    <em>💡 Mẹo Zalo: Nhớ chụp hình học viên và gửi kèm đánh giá. Khi copy mẫu nhận xét có sẵn vào Zalo PC, hãy bật tính năng soạn thảo (biểu tượng chữ A) trước khi dán để giữ nguyên định dạng màu.</em>
-                                                </div>
-                                                <div className="text-xs text-slate-400 p-3 bg-slate-800/50 rounded-lg border border-white/5 whitespace-pre-line">
-                                                    <strong className="text-slate-300">Mẫu nhận xét LMS (copy paste trực tiếp):</strong>
-                                                    Tóm tắt buổi học: Bệ phóng tên lửa.
-                                                    - Học viên được giới thiệu VEX GO Kit...
-                                                    Mục tiêu:
-                                                    - Học viên ghi nhớ các thành phần điện tử...
-                                                </div>
-                                            </div>
-                                        </td>
+                                        <td>Nhận xét buổi học</td>
+                                        <td>Thực hiện nhận xét sau buổi học trên LMS và Zalo.</td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="mt-3 rounded-xl border border-[#c9ded7] bg-[#eef7f3] p-4">
+                            <p className="text-sm font-bold text-[#1d584e]">Khi học viên phát sinh vấn đề về thái độ hoặc năng lực</p>
+                            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[#1e293b]">
+                                <li>Giáo viên linh động xử lý dựa trên chuyên môn và kỹ năng sư phạm.</li>
+                                <li>Thông báo với TE/Leader và CS để kịp thời trao đổi với phụ huynh và có phương án hỗ trợ.</li>
+                            </ul>
                         </div>
                     </Step>
 
@@ -654,7 +629,7 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                                     <li>Mức 4: 4.0 - 4.4 điểm</li>
                                     <li>Mức 5: &ge; 4.4 điểm</li>
                                 </ul>
-                                <ResourceCard href="https://docs.google.com/forms/d/e/1FAIpQLSfyK41x_vyFztgjU1sTgJGLiHE1yvf7mmHuUQe5gUQDLQcO_Q/viewform" icon={FileText} label="Form Khảo sát" color="amber" />
+                                <ResourceCard href="https://cxohok12.gitbook.io/quy-trinh-quy-dinh-danh-cho-giao-vien/vi.-quy-trinh-van-hanh-lop-hoc/quy-trinh-mot-buoi-giang-day/huong-dan-khao-sat-danh-gia-cua-hoc-vien-tren-lms-va-denise" icon={FileText} label="Form Khảo sát" color="amber" />
                             </div>
                             
                             <div className="rounded-xl border border-white/10 p-4 bg-white/[0.02]">
@@ -671,25 +646,6 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                             </div>
                         </div>
 
-                        <div className="mt-4 rounded-xl border border-white/10 p-4 bg-blue-900/10">
-                            <h3 className="font-bold text-blue-300 flex items-center gap-2 mb-2"><Video className="w-4 h-4" /> Hướng dẫn thêm & Test sư phạm</h3>
-                            <p className="text-sm text-slate-300 mb-3">Tham khảo các hướng dẫn sau để lấy đủ điểm chuyên môn và viết nhận xét đúng chuẩn:</p>
-                            <div className="grid grid-cols-1 gap-4 mt-2">
-                                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/40">
-                                    <video 
-                                        src="/img/video-huong-dan-dang-ki-kiem-tra-su-pham.mp4" 
-                                        controls
-                                        preload="metadata"
-                                        className="w-full h-auto aspect-video bg-black/50"
-                                    />
-                                    <div className="p-3 border-t border-white/10">
-                                        <h4 className="font-semibold text-blue-300 text-sm flex items-center gap-2"><PlayCircle className="w-4 h-4"/> HD đăng ký test sư phạm</h4>
-                                        <p className="text-xs text-slate-400 mt-1">Bổ sung chỉ số chuyên môn</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
                     </Step>
                     
                     <Step n={4} title="Tài liệu & Quy định Vận hành" last>
@@ -707,8 +663,8 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                     <Step n={1} title="Kết quả sau khi lên LEC">
                         <Check items={[
                             'Đứng giảng dạy chính thức tại lớp',
-                            'Tham gia quy trình deal lương sau 6 tháng làm việc',
-                            'Leader đánh giá và hỗ trợ deal lương đợt đầu tiên',
+                            'Tham gia review quá trình dạy sau 6 tháng làm việc',
+                            'Leader đánh giá và phản hồi để giáo viên cải thiện chất lượng giảng dạy',
                         ]} />
                         <Callout icon="📌" text="Trong 6 tháng đầu: sẵn sàng hỗ trợ tất cả tình huống và không ngừng học hỏi để đạt kết quả tốt nhất." color="blue" />
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-1">Tài liệu lương</p>
@@ -719,7 +675,7 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                         </div>
                     </Step>
 
-                    <Step n={2} title="Vai trò BGK → Trở thành Super Mentor" last>
+                    <Step n={2} title="Vai trò BGK Demo Coding → Trở thành Super Mentor" last>
                         {/* Roadmap */}
                         <div className="flex flex-col gap-0">
                             {[
@@ -727,7 +683,7 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                                 { icon: '📚', label: 'Nắm vững giáo trình & bộ môn' },
                                 { icon: '📝', label: 'Đề xuất duyệt giảng Super Mentor với Leader' },
                                 { icon: '🎓', label: 'Đào tạo chuyên sâu & leader duyệt' },
-                                { icon: '⚖️', label: 'Tham gia vai trò BGK' },
+                                { icon: '⚖️', label: 'Tham gia vai trò BGK Demo Coding' },
                                 { icon: '⭐', label: 'Super Mentor', highlight: true },
                             ].map((item, i, arr) => (
                                 <div key={i} className="flex items-start gap-3">
@@ -740,37 +696,92 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
                             ))}
                         </div>
 
-                        <div className="mt-4 rounded-xl bg-white/[0.03] border border-white/10 p-4">
-                            <p className="text-slate-300 text-sm leading-relaxed">
-                                Khi trở thành super mentor, bạn tham gia <strong className="text-white">chấm điểm học viên trong buổi thi số 14</strong> nhằm tìm ra Top 1, 2, 3… — đảm bảo tính công bằng và công nhận nỗ lực của các em.
-                            </p>
-                        </div>
+                        <Callout
+                            icon="🎮"
+                            text="Trong Demo Coding, học sinh trình bày và vận hành sản phẩm; BGK nhận xét, đặt câu hỏi để học sinh bảo vệ dự án hoặc giải thích thử thách đã thực hiện."
+                            color="blue"
+                        />
 
-                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-3">BGK quan sát và chấm trong 3 giai đoạn</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-500">1. Mở đầu và nội quy buổi Demo</p>
+                        <Check items={[
+                            'Không làm việc riêng, đùa giỡn hoặc gây mất trật tự trong phần trình bày của bạn.',
+                            'Khuyến khích học sinh tương tác và trải nghiệm sản phẩm của các bạn demo.',
+                            'Không tự ý ra ngoài nếu không thực sự cần thiết.',
+                        ]} />
+
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-500">2. Quy trình cho mỗi phần Demo</p>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                             {[
-                                { ph: '① Lắp ráp', d: 'Quan sát và đặt câu hỏi gợi mở trong lúc HS làm.' },
-                                { ph: '② Lập trình', d: 'Quan sát quá trình, đặt thêm câu hỏi để hiểu tư duy của HS.' },
-                                { ph: '③ Thuyết trình', d: 'Sau khi HS trình bày xong, đặt câu hỏi để làm rõ nội dung còn thiếu.' },
+                                { ph: '① Học sinh Demo', d: 'Trình bày ý tưởng, quá trình thực hiện và trực tiếp vận hành sản phẩm Coding.' },
+                                { ph: '② BGK hỏi & nhận xét', d: 'Đặt câu hỏi mở để học sinh bảo vệ dự án, giải thích lựa chọn và thử thách đã xử lý.' },
+                                { ph: '③ Kết thúc tích cực', d: 'Ghi nhận nỗ lực và nói: “Chúc mừng con đã hoàn thành phần trình bày.”' },
                             ].map(item => (
-                                <div key={item.ph} className="rounded-xl bg-amber-900/15 border border-amber-500/20 p-3">
-                                    <p className="text-amber-300 font-bold text-xs mb-1">{item.ph}</p>
-                                    <p className="text-slate-400 text-xs leading-relaxed">{item.d}</p>
+                                <div key={item.ph} className="rounded-xl border border-amber-500/20 bg-amber-900/15 p-3">
+                                    <p className="mb-1 text-xs font-bold text-amber-300">{item.ph}</p>
+                                    <p className="text-xs leading-relaxed text-slate-400">{item.d}</p>
                                 </div>
                             ))}
                         </div>
 
-                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-3">Câu hỏi BGK — tối thiểu 3 câu/HS</p>
-                        <div className="flex flex-wrap gap-2">
-                            {['Sáng tạo', 'Làm việc nhóm', 'Lập trình', 'Thuyết trình', 'Câu hỏi gợi mở'].map(t => (
-                                <span key={t} className="px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 text-xs font-semibold border border-amber-500/20">{t}</span>
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-500">3. Đặt câu hỏi theo Bloom Taxonomy</p>
+                        <Callout icon="!" text="Hạn chế câu hỏi Có/Không. Ưu tiên: Như thế nào? Vì sao? Để làm gì? Tại sao?" />
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            {[
+                                { level: 'Dễ — Nhận diện', detail: 'Gọi tên, định nghĩa, mô tả quá trình, màu sắc hoặc thành phần.' },
+                                { level: 'Trung bình — Hiểu & vận dụng', detail: 'Giải thích cách dùng kiến thức để tạo chức năng hoặc xử lý yêu cầu.' },
+                                { level: 'Khó — Phân tích', detail: 'Phân tích nguyên nhân, lỗi, lựa chọn kỹ thuật và cách cải tiến sản phẩm.' },
+                                { level: 'Câu hỏi sao — Mở rộng', detail: '“Thay vì cách này, con còn cách nào khác?” hoặc đề xuất một phương án mới.' },
+                            ].map(item => (
+                                <div key={item.level} className="rounded-xl border border-sky-200 bg-sky-50 p-3">
+                                    <p className="text-sm font-bold text-sky-800">{item.level}</p>
+                                    <p className="mt-1 text-xs leading-relaxed text-slate-600">{item.detail}</p>
+                                </div>
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
-                            <ResourceCard href="https://docs.google.com/spreadsheets/d/1WrQyJD3mU7plrikePg01TWuiQB5MTjV_tHEM9isNxjM/edit" icon={ClipboardCheck} label="Bộ câu hỏi BGK mẫu" desc="Tham khảo trước khi chấm" color="amber" />
-                            <ResourceCard href="https://docs.google.com/spreadsheets/d/1UPb8q8rJXWeFfaZNIkxAbUnGcDmAz3uE/edit" icon={Star} label="Bảng điểm 4+" color="blue" />
-                            <ResourceCard href="https://docs.google.com/spreadsheets/d/1E4rLWCul0DrBFZv5kvKKgc2h4mhlYWAr/edit" icon={Star} label="Bảng điểm K12" color="blue" />
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-500">4. Trọng tâm đánh giá Demo Coding</p>
+                        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                            {[
+                                {
+                                    title: 'Thuyết trình',
+                                    items: ['Giọng nói và phong thái tự tin', 'Không phụ thuộc hoàn toàn vào slide', 'Body language và tương tác', 'Slide rõ nội dung, bố cục, màu sắc và phông chữ'],
+                                },
+                                {
+                                    title: 'Sản phẩm Coding',
+                                    items: ['Giao diện, hình ảnh và âm thanh phù hợp', 'Menu, điều hướng, hướng dẫn, cài đặt và hiệu ứng', 'Chức năng chính, tính năng ẩn và lỗi còn tồn tại', 'Khả năng đọc lỗi và thực hiện hotfix'],
+                                },
+                                {
+                                    title: 'Ý tưởng & kiến thức',
+                                    items: ['Ý tưởng và quá trình làm việc', 'Kiến thức dùng để tạo từng chức năng', 'Lý do lựa chọn giải pháp', 'Cải tiến của khóa Advance so với sản phẩm Basic'],
+                                },
+                            ].map(group => (
+                                <div key={group.title} className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                                    <p className="mb-2 text-sm font-bold text-emerald-300">{group.title}</p>
+                                    <ul className="space-y-1.5">
+                                        {group.items.map(item => (
+                                            <li key={item} className="flex items-start gap-2 text-xs leading-relaxed text-slate-400">
+                                                <ChevronRight className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500" />
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-500">5. Công thức nhận xét và tổng kết</p>
+                        <div className="flex flex-wrap gap-2">
+                            {['Ghi nhận', 'Nêu hạn chế', 'Cách khắc phục & góp ý', 'Khích lệ'].map(t => (
+                                <span key={t} className="rounded-full border border-amber-500/20 bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-300">{t}</span>
+                            ))}
+                        </div>
+                        <Check items={[
+                            'Cuối buổi, nhận xét chung theo nhóm đa số và thiểu số; tránh nêu cá nhân theo hướng tiêu cực.',
+                            'Giới thiệu ngắn về khóa học tiếp theo và học sinh sẽ học gì ở cấp độ tiếp theo.',
+                        ]} />
+
+                        <div className="mt-2 grid grid-cols-1 gap-2">
+                            <ResourceCard href="https://docs.google.com/spreadsheets/d/1kdpTbzzLll2U7U9x0gRoM4HZPgNlHKxXLTuSMbaTtW4/edit?gid=20309811#gid=20309811" icon={ClipboardCheck} label="Bộ câu hỏi BGK mẫu" desc="Tham khảo trước buổi Demo Coding" color="amber" />
                         </div>
 
                         <Callout icon="💡" text="Đề xuất với Leader để có buổi duyệt giảng và đào tạo chuyên sâu — đây là bước cuối để đạt role Super Mentor." />
@@ -781,9 +792,8 @@ export default function Screen11({ onNavigate }: { onNavigate?: (screen: string)
             {/* Footer */}
             <div className="mt-12 border-t border-white/10 pt-6">
                 <p className="text-slate-500 text-xs text-center mb-3">Thông tin liên hệ Bộ phận Chuyên môn (Leader / Teacher Coordinator)</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-2xl mx-auto">
+                <div className="mx-auto grid max-w-md grid-cols-1 gap-2">
                     <ResourceCard href="https://cxohok12.gitbook.io/quy-trinh-quy-dinh-danh-cho-giao-vien" icon={BookOpen} label="📖 Quy chế & Nghiệp vụ" desc="Hệ thống văn bản hiện hành" color="blue" />
-                    <ResourceCard href="https://apprbt.vercel.app/" icon={Star} label="🔍 Hệ sinh thái RBT" desc="Kho lưu trữ học liệu số" color="violet" />
                 </div>
             </div>
 

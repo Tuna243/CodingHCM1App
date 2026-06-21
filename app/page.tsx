@@ -7,14 +7,14 @@
 import { getTeacherCode, setTeacherCode } from '@/lib/appscript';
 import { cn } from '@/lib/utils';
 import { useCallback, useEffect, useState } from 'react';
-import FeedbackButton from './components/FeedbackButton';
 import Screen1 from './components/Screen1';
 import Screen11 from './components/Screen11';
 import Screen2 from './components/Screen2';
 import Screen4 from './components/Screen4';
 import Screen6 from './components/Screen6';
+import ScreenLms from './components/ScreenLms';
+import ScreenUniform from './components/ScreenUniform';
 import Sidebar from './components/Sidebar';
-import StatisticsButton from './components/StatisticsButton';
 import TeacherCodeModal from './components/TeacherCodeModal';
 import { usePageTracking } from './hooks/usePageTracking';
 
@@ -24,6 +24,9 @@ const KEY_TO_SCREEN: Record<string, string> = {
   '2': 'screen2',
   '3': 'screen4',
   '4': 'screen6',
+  '5': 'screenLms',
+  'u': 'screenUniform',
+  'U': 'screenUniform',
 };
 
 // Screens cần full height
@@ -65,8 +68,8 @@ export default function Home() {
         next.add(screen);
         return next;
       });
-      // Xoá query param khỏi URL mà không reload
-      window.history.replaceState({}, '', '/');
+      // Xoá query param khỏi URL mà không reload, giữ hash cho các modal nội bộ.
+      window.history.replaceState({}, '', `/${window.location.hash}`);
     }
   }, []);
 
@@ -82,8 +85,8 @@ export default function Home() {
   // Handle teacher code submission
   const handleTeacherCodeSubmit = (code: string) => {
     console.log('✅ Setting teacher code:', code);
-    setTeacherCode(code);
     setShowTeacherModal(false);
+    setTeacherCode(code);
     // Trigger a re-render to start tracking with new teacher code
     // Force screen to re-track by changing state
     const currentScreen = activeScreen;
@@ -133,7 +136,7 @@ export default function Home() {
         <TeacherCodeModal onSubmit={handleTeacherCodeSubmit} />
       )}
 
-      <div className="flex min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-50">
+      <div className="flex min-h-screen bg-[var(--palette-background)] text-[var(--palette-text)]">
         <Sidebar
           activeScreen={activeScreen}
           onScreenChange={handleScreenChange}
@@ -176,6 +179,20 @@ export default function Home() {
               </div>
             )}
 
+            {/* Personal LMS */}
+            {loadedScreens.has('screenLms') && (
+              <div style={activeScreen === 'screenLms' ? visibleStyle : hiddenStyle}>
+                <ScreenLms />
+              </div>
+            )}
+
+            {/* Uniform */}
+            {loadedScreens.has('screenUniform') && (
+              <div style={activeScreen === 'screenUniform' ? visibleStyle : hiddenStyle}>
+                <ScreenUniform />
+              </div>
+            )}
+
             {/* Screen 11 - Lộ trình ứng viên */}
             {loadedScreens.has('screen11') && (
               <div style={activeScreen === 'screen11' ? visibleStyle : hiddenStyle}>
@@ -184,9 +201,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* Action Buttons - Always visible */}
-          <StatisticsButton />
-          <FeedbackButton currentScreen={activeScreen} />
         </main>
       </div>
     </>

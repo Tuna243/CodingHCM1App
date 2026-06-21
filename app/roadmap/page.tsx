@@ -21,7 +21,7 @@ export default function RoadmapPage() {
     }
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-50 text-slate-900">
+        <div className="flex min-h-screen bg-[var(--palette-background)] text-[var(--palette-text)]">
             {/* Sidebar — desktop only (mobile dùng bottom nav trong component) */}
             <Sidebar
                 activeScreen="screen11"

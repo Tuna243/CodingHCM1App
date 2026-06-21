@@ -48,20 +48,20 @@ export default function TeacherCodeModal({ onSubmit }: TeacherCodeModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/45 p-4 backdrop-blur-sm">
-      <Card className="w-full max-w-xl border-sky-100 bg-white shadow-2xl">
-        <CardHeader className="border-b border-slate-100 text-center">
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-sky-600 to-cyan-500">
-            <UserCheck className="h-8 w-8 text-white" />
+    <div className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-slate-900/45 p-3 backdrop-blur-sm sm:items-center sm:p-4">
+      <Card className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-xl flex-col overflow-hidden border-sky-100 bg-white shadow-2xl sm:max-h-[calc(100dvh-2rem)]">
+        <CardHeader className="shrink-0 border-b border-slate-100 p-4 text-center sm:p-6">
+          <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-sky-600 to-cyan-500 sm:mb-3 sm:h-16 sm:w-16">
+            <UserCheck className="h-6 w-6 text-white sm:h-8 sm:w-8" />
           </div>
-          <CardTitle className="gradient-text text-2xl font-bold">
+          <CardTitle className="gradient-text text-xl font-bold sm:text-2xl">
             Coding HCM1
           </CardTitle>
-          <CardDescription className="mt-2 text-slate-600">
+          <CardDescription className="mt-1 text-slate-600 sm:mt-2">
             Chọn thông tin tên của bạn để Leader có thể thống kê lưu lượng truy cập.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 pt-6">
+        <CardContent className="flex min-h-0 flex-1 flex-col gap-3 p-4 sm:gap-4 sm:p-6">
           <Input
             value={query}
             onChange={(event) => {
@@ -73,12 +73,13 @@ export default function TeacherCodeModal({ onSubmit }: TeacherCodeModalProps) {
             autoFocus
           />
 
-          <div className="max-h-72 space-y-2 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-2">
+          <div className="min-h-0 flex-1 space-y-2 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-2">
             {loading ? (
               <p className="p-6 text-center text-sm text-slate-500">Đang tải danh sách giáo viên...</p>
             ) : filteredTeachers.length ? (
               filteredTeachers.map((teacher) => (
                 <button
+                  type="button"
                   key={teacher.code}
                   onClick={() => {
                     setSelectedCode(teacher.code);
@@ -107,9 +108,10 @@ export default function TeacherCodeModal({ onSubmit }: TeacherCodeModalProps) {
           {error && <p className="text-sm text-red-600">⚠️ {error}</p>}
 
           <Button
+            type="button"
             onClick={handleSubmit}
             disabled={!selectedCode}
-            className="h-12 w-full bg-gradient-to-r from-sky-600 to-cyan-500 text-base text-white hover:from-sky-700 hover:to-cyan-600"
+            className="h-12 w-full shrink-0 bg-[#1d584e] text-base text-white hover:bg-[#17483f]"
           >
             <UserCheck className="h-5 w-5" />
             Xác nhận giáo viên

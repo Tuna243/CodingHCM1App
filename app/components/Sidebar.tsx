@@ -6,8 +6,8 @@
 
 import { getSessionId, getUserAgent, getUserId, isAppsScriptConfigured, trackLocalPageView, trackPageView } from '@/lib/appscript';
 import { cn } from "@/lib/utils";
-import { ExternalLink, Link as LinkIcon, Menu, MessageSquare, QrCode, Search, TrendingUp, X } from "lucide-react";
-import { useEffect, useState } from 'react';
+import { ExternalLink, GraduationCap, Link as LinkIcon, Menu, MessageSquare, QrCode, Search, Shirt, TrendingUp, X } from "lucide-react";
+import { useState } from 'react';
 
 interface SidebarProps {
   activeScreen: string;
@@ -17,10 +17,12 @@ interface SidebarProps {
 }
 
 const menuItems = [
+  { id: 'screenLms', label: 'Lớp của tôi', icon: GraduationCap, shortcut: '5' },
   { id: 'screen1', label: 'Giáo trình', icon: QrCode, shortcut: '1' },
   { id: 'screen2', label: 'Tìm phiếu', icon: Search, shortcut: '2' },
   { id: 'screen4', label: 'Nhận xét Zalo', icon: MessageSquare, shortcut: '3' },
   { id: 'screen6', label: 'Link Mentor', icon: LinkIcon, shortcut: '4' },
+  { id: 'screenUniform', label: 'Đồng phục giáo viên', icon: Shirt, shortcut: 'U' },
   { id: 'screen11', label: 'Lộ trình ứng viên', icon: TrendingUp, shortcut: 'L', href: '/roadmap' },
   { id: 'deal', label: 'Chỉ số deal lương', icon: ExternalLink, shortcut: 'D', href: 'https://tmsmindx.vercel.app/' },
 ];
@@ -29,23 +31,10 @@ const menuItems = [
 const MOBILE_NAV_ITEMS = ['screen1', 'screen2', 'screen4', 'screen6'];
 
 export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onToggle }: SidebarProps) {
-  const [dealClicks, setDealClicks] = useState<number>(0);
-  const [isMounted, setIsMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    try {
-      const v = localStorage.getItem('deal_click_count');
-      if (v) setDealClicks(parseInt(v, 10));
-    } catch { }
-  }, []);
 
   function handleDealClick() {
     try {
-      const next = dealClicks + 1;
-      localStorage.setItem('deal_click_count', String(next));
-      setDealClicks(next);
       try { trackLocalPageView('deal'); } catch { }
       (async () => {
         try {
@@ -70,11 +59,11 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
     const Icon = item.icon;
     const isActive = activeScreen === item.id;
     const cls = cn(
-      "w-full flex items-center rounded-lg text-sm font-medium transition-colors relative",
-      compact ? "justify-center px-0 py-2.5" : "gap-3 px-3 py-2.5",
+      "relative flex min-h-11 w-full cursor-pointer items-center rounded-lg text-sm font-medium transition-colors",
+      compact ? "justify-center px-0 py-2.5" : "justify-start gap-3 px-3 py-2.5 text-left",
       isActive
-        ? "bg-gradient-to-r from-sky-600 to-cyan-500 text-white shadow-lg"
-        : "text-slate-600 hover:bg-sky-50 hover:text-sky-700"
+        ? "bg-[#1d584e] text-white shadow-lg"
+        : "text-[#1e293b] hover:bg-[#eef7f3] hover:text-[#1d584e]"
     );
 
     if (item.href) {
@@ -84,16 +73,9 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
           {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           onClick={() => { if (item.id === 'deal') handleDealClick(); }}
           className={cls} title={compact ? `${item.label} (${item.shortcut})` : undefined}>
-          <Icon className="h-5 w-5 flex-shrink-0" />
+          <Icon className="h-5 w-5 shrink-0" />
           {!compact && (
-            <>
-              <span className="truncate flex-1">{item.label}</span>
-              <span className={cn("flex items-center justify-center w-6 h-6 rounded text-xs font-semibold",
-                isActive ? "bg-white/20 text-white" : "bg-slate-100 text-sky-700")}>{item.shortcut}</span>
-              {isMounted && item.id === 'deal' && dealClicks > 0 && (
-                <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-600 text-white">Đã bấm</span>
-              )}
-            </>
+            <span className="min-w-0 flex-1 truncate text-left">{item.label}</span>
           )}
         </a>
       );
@@ -104,13 +86,9 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
         onClick={() => onScreenChange(item.id)}
         className={cls}
         title={compact ? `${item.label} (${item.shortcut})` : undefined}>
-        <Icon className="h-5 w-5 flex-shrink-0" />
+        <Icon className="h-5 w-5 shrink-0" />
         {!compact && (
-          <>
-            <span className="truncate flex-1">{item.label}</span>
-            <span className={cn("flex items-center justify-center w-6 h-6 rounded text-xs font-semibold",
-              isActive ? "bg-white/20 text-white" : "bg-[rgba(30,41,59,0.6)] text-[#a5b4fc]")}>{item.shortcut}</span>
-          </>
+          <span className="min-w-0 flex-1 truncate text-left">{item.label}</span>
         )}
       </button>
     );
@@ -122,26 +100,26 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
           DESKTOP SIDEBAR (md+)
       ═══════════════════════════════════════════════════════════════════ */}
       <aside className={cn(
-        "hidden md:flex fixed left-0 top-0 h-full border-r border-sky-100 bg-white/90 backdrop-blur-md text-slate-900 transition-all duration-300 z-40 flex-col shadow-sm",
+        "hidden md:flex fixed left-0 top-0 h-full border-r border-[#c9ded7] bg-white/95 backdrop-blur-md text-[#1e293b] transition-all duration-300 z-40 flex-col shadow-sm",
         isCollapsed ? "w-20" : "w-64"
       )}>
         {/* Header */}
         <div className={cn(
-          "flex h-16 items-center border-b border-sky-100 transition-all duration-300",
+          "flex h-16 items-center border-b border-[#c9ded7] transition-all duration-300",
           isCollapsed ? "justify-center px-0" : "justify-between px-6"
         )}>
           {!isCollapsed ? (
             <>
               <h2 className="text-lg font-semibold gradient-text">Coding HCM1</h2>
               <button onClick={onToggle}
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-sky-50 hover:text-sky-700 transition-colors"
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-[#3a7a6e] hover:bg-[#eef7f3] hover:text-[#1d584e] transition-colors"
                 aria-label="Thu gọn sidebar">
                 <X className="h-5 w-5" />
               </button>
             </>
           ) : (
             <button onClick={onToggle}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-sky-50 hover:text-sky-700 transition-colors mx-auto"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-[#3a7a6e] hover:bg-[#eef7f3] hover:text-[#1d584e] transition-colors mx-auto"
               aria-label="Mở rộng sidebar">
               <X className="h-5 w-5" />
             </button>
@@ -155,10 +133,11 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
 
         {/* Footer */}
         {!isCollapsed && (
-          <div className="p-4 border-t border-sky-100 mt-auto">
+          <div className="p-4 border-t border-[#c9ded7] mt-auto">
             <p className="text-xs text-center text-slate-500 leading-relaxed">
-              Coding HCM1<br />
-              <span className="text-sky-700 font-semibold">Nguyễn Hoàng Tuấn</span>
+              Made by<br />
+              <span className="text-[#1d584e] font-semibold">Nguyễn Hoàng Tuấn</span><br />
+              <span className="text-[#3a7a6e]">Lưu hành nội bộ HCM1</span>
             </p>
           </div>
         )}
@@ -176,10 +155,10 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
 
       {/* Slide-up drawer (toàn bộ menu) */}
       <div className={cn(
-        "md:hidden fixed bottom-[60px] left-0 right-0 z-50 bg-white border-t border-sky-100 transition-transform duration-300 ease-in-out max-h-[70vh] overflow-y-auto rounded-t-2xl shadow-2xl",
+        "md:hidden fixed bottom-[60px] left-0 right-0 z-50 bg-white border-t border-[#c9ded7] transition-transform duration-300 ease-in-out max-h-[70vh] overflow-y-auto rounded-t-2xl shadow-2xl",
         mobileOpen ? "translate-y-0" : "translate-y-full"
       )}>
-        <div className="flex items-center justify-between px-4 py-3 border-b border-sky-100">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#c9ded7]">
           <span className="text-sm font-semibold text-slate-900">Menu</span>
           <button onClick={() => setMobileOpen(false)}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-700">
@@ -194,22 +173,20 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
               return (
                 <a key={item.id} href={item.href} target="_blank" rel="noopener noreferrer"
                   onClick={() => { if (item.id === 'deal') handleDealClick(); setMobileOpen(false); }}
-                  className={cn("flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                    isActive ? "bg-sky-600 text-white" : "text-slate-600 hover:bg-sky-50")}>
-                  <Icon className="w-5 h-5 flex-shrink-0" />
-                  <span className="flex-1">{item.label}</span>
+                  className={cn("flex min-h-11 cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors",
+                    isActive ? "bg-[#1d584e] text-white" : "text-[#1e293b] hover:bg-[#eef7f3]")}>
+                  <Icon className="h-5 w-5 shrink-0" />
+                  <span className="min-w-0 flex-1 truncate text-left">{item.label}</span>
                   <ExternalLink className="w-3.5 h-3.5 opacity-50" />
                 </a>
               );
             }
             return (
               <button key={item.id} onClick={() => handleMobileSelect(item.id)}
-                className={cn("w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                  isActive ? "bg-sky-600 text-white" : "text-slate-600 hover:bg-sky-50")}>
-                <Icon className="w-5 h-5 flex-shrink-0" />
-                <span className="flex-1 text-left">{item.label}</span>
-                <span className={cn("text-xs font-bold px-1.5 py-0.5 rounded",
-                  isActive ? "bg-white/20" : "bg-slate-100 text-slate-500")}>{item.shortcut}</span>
+                className={cn("flex min-h-11 w-full cursor-pointer items-center justify-start gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors",
+                  isActive ? "bg-[#1d584e] text-white" : "text-[#1e293b] hover:bg-[#eef7f3]")}>
+                <Icon className="h-5 w-5 shrink-0" />
+                <span className="min-w-0 flex-1 truncate text-left">{item.label}</span>
               </button>
             );
           })}
@@ -217,24 +194,24 @@ export default function Sidebar({ activeScreen, onScreenChange, isCollapsed, onT
       </div>
 
       {/* Bottom nav bar cố định */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 border-t border-sky-100 backdrop-blur-md flex items-center">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 border-t border-[#c9ded7] backdrop-blur-md flex items-center">
         {menuItems.filter(i => MOBILE_NAV_ITEMS.includes(i.id)).map(item => {
           const Icon = item.icon;
           const isActive = activeScreen === item.id;
           return (
             <button key={item.id} onClick={() => { onScreenChange(item.id); setMobileOpen(false); }}
               className={cn("flex-1 flex flex-col items-center gap-0.5 py-2 px-1 transition-colors",
-                isActive ? "text-sky-600" : "text-slate-500 hover:text-sky-500")}>
+                isActive ? "text-[#1d584e]" : "text-[#3a7a6e] hover:text-[#1d584e]")}>
               <Icon className="w-5 h-5" />
               <span className="text-xs font-medium leading-tight truncate max-w-full">{item.label}</span>
-              {isActive && <span className="w-1 h-1 rounded-full bg-sky-600" />}
+              {isActive && <span className="w-1 h-1 rounded-full bg-[#1d584e]" />}
             </button>
           );
         })}
         {/* Nút mở drawer */}
         <button onClick={() => setMobileOpen(o => !o)}
           className={cn("flex-1 flex flex-col items-center gap-0.5 py-2 px-1 transition-colors",
-            mobileOpen ? "text-sky-600" : "text-slate-500 hover:text-sky-500")}>
+            mobileOpen ? "text-[#1d584e]" : "text-[#3a7a6e] hover:text-[#1d584e]")}>
           <Menu className="w-5 h-5" />
           <span className="text-xs font-medium">Thêm</span>
         </button>

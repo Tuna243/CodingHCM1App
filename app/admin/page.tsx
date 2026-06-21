@@ -8,6 +8,7 @@
 import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Input } from '@/app/components/ui/input';
+import UniformAdminPanel from '@/app/components/UniformAdminPanel';
 import type { AdminDashboardData } from '@/lib/adminStats';
 import {
   DEFAULT_CONTENT_SETTINGS,
@@ -20,27 +21,57 @@ import {
   Activity,
   Award,
   BarChart3,
+  CalendarDays,
+  Check,
   Clock,
+  Copy,
   Eye,
+  EyeOff,
   LogOut,
   MessageSquare,
+  Search,
   Star,
   Target,
   TrendingUp,
   Users
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const APPSCRIPT_URL = process.env.NEXT_PUBLIC_APPSCRIPT_URL || '';
+
+type Teacher = {
+  name: string;
+  code: string;
+  center: string;
+  email: string;
+  phone: string;
+  rankK12: string;
+  joinedDate: string;
+};
+
+function formatJoinedDate(joinedDate: string) {
+  if (!joinedDate) return '—';
+  const parsed = new Date(`${joinedDate}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return joinedDate;
+  return new Intl.DateTimeFormat('vi-VN').format(parsed);
+}
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState<AdminDashboardData | null>(null);
   const [contentSettings, setContentSettings] = useState<ContentSettings>(DEFAULT_CONTENT_SETTINGS);
   const [contentSaved, setContentSaved] = useState(false);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [teachersLoading, setTeachersLoading] = useState(false);
+  const [teachersError, setTeachersError] = useState('');
+  const [teachersWarnings, setTeachersWarnings] = useState<string[]>([]);
+  const [teacherQuery, setTeacherQuery] = useState('');
+  const [teacherCenter, setTeacherCenter] = useState('all');
+  const [emailCopyStatus, setEmailCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
 
   useEffect(() => {
     setContentSettings(getContentSettings());
@@ -48,9 +79,78 @@ export default function AdminPage() {
       .then((response) => response.json())
       .then(({ authenticated }) => {
         setIsAuthenticated(Boolean(authenticated));
-        if (authenticated) loadDashboardData();
+        if (authenticated) {
+          loadDashboardData();
+          loadTeachers();
+        }
       });
   }, []);
+
+  const teacherCenters = useMemo(
+    () => Array.from(new Set(teachers.map((teacher) => teacher.center))).sort((a, b) => a.localeCompare(b, 'vi')),
+    [teachers],
+  );
+
+  const allMindxEmails = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          teachers
+            .map((teacher) => teacher.email.trim())
+            .filter((email) => email.toLowerCase().endsWith('@mindx.net.vn')),
+        ),
+      ).sort((a, b) => a.localeCompare(b, 'vi')),
+    [teachers],
+  );
+
+  const filteredTeachers = useMemo(() => {
+    const keyword = teacherQuery.trim().toLocaleLowerCase('vi');
+    return teachers.filter((teacher) => {
+      const matchesCenter = teacherCenter === 'all' || teacher.center === teacherCenter;
+      const matchesKeyword =
+        !keyword ||
+        `${teacher.name} ${teacher.code} ${teacher.center} ${teacher.email} ${teacher.phone} ${teacher.rankK12} ${teacher.joinedDate}`
+          .toLocaleLowerCase('vi')
+          .includes(keyword);
+      return matchesCenter && matchesKeyword;
+    });
+  }, [teacherCenter, teacherQuery, teachers]);
+
+  const tenureStats = useMemo(() => {
+    const now = new Date();
+    const validTeachers = teachers.flatMap((teacher) => {
+      if (!teacher.joinedDate) return [];
+      const joinedAt = new Date(`${teacher.joinedDate}T00:00:00`);
+      if (Number.isNaN(joinedAt.getTime())) return [];
+      const months = Math.max(
+        0,
+        (now.getFullYear() - joinedAt.getFullYear()) * 12 +
+          now.getMonth() -
+          joinedAt.getMonth(),
+      );
+      return [{ ...teacher, months }];
+    });
+    const buckets = [
+      { label: '0–3 tháng', min: 0, max: 3, color: 'bg-cyan-500' },
+      { label: '4–6 tháng', min: 4, max: 6, color: 'bg-sky-500' },
+      { label: '7–12 tháng', min: 7, max: 12, color: 'bg-blue-500' },
+      { label: '1–2 năm', min: 13, max: 24, color: 'bg-indigo-500' },
+      { label: 'Trên 2 năm', min: 25, max: Number.POSITIVE_INFINITY, color: 'bg-violet-500' },
+    ].map((bucket) => ({
+      ...bucket,
+      count: validTeachers.filter(
+        (teacher) => teacher.months >= bucket.min && teacher.months <= bucket.max,
+      ).length,
+    }));
+    const totalMonths = validTeachers.reduce((sum, teacher) => sum + teacher.months, 0);
+    return {
+      buckets,
+      count: validTeachers.length,
+      averageMonths: validTeachers.length ? Math.round(totalMonths / validTeachers.length) : 0,
+      longestMonths: validTeachers.reduce((max, teacher) => Math.max(max, teacher.months), 0),
+      maxBucketCount: Math.max(1, ...buckets.map((bucket) => bucket.count)),
+    };
+  }, [teachers]);
 
   const handleLogin = async () => {
     const response = await fetch('/api/admin/login', {
@@ -62,6 +162,7 @@ export default function AdminPage() {
       setIsAuthenticated(true);
       setError('');
       loadDashboardData();
+      loadTeachers();
     } else {
       const result = await response.json().catch(() => ({}));
       setError(result.error || 'Mật khẩu không đúng!');
@@ -79,6 +180,39 @@ export default function AdminPage() {
     saveContentSettings(contentSettings);
     setContentSaved(true);
     window.setTimeout(() => setContentSaved(false), 2500);
+  };
+
+  const handleCopyMindxEmails = async () => {
+    if (allMindxEmails.length === 0) return;
+
+    try {
+      await navigator.clipboard.writeText(allMindxEmails.join('; '));
+      setEmailCopyStatus('copied');
+    } catch {
+      setEmailCopyStatus('error');
+    } finally {
+      window.setTimeout(() => setEmailCopyStatus('idle'), 2500);
+    }
+  };
+
+  const loadTeachers = async () => {
+    setTeachersLoading(true);
+    setTeachersError('');
+    setTeachersWarnings([]);
+
+    try {
+      const response = await fetch('/api/admin/teachers', { cache: 'no-store' });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Không thể tải danh sách giáo viên.');
+      setTeachers(Array.isArray(result.teachers) ? result.teachers : []);
+      setTeachersWarnings(Array.isArray(result.warnings) ? result.warnings : []);
+    } catch (loadError) {
+      setTeachersError(
+        loadError instanceof Error ? loadError.message : 'Không thể tải danh sách giáo viên.',
+      );
+    } finally {
+      setTeachersLoading(false);
+    }
   };
 
   const loadDashboardData = async () => {
@@ -168,22 +302,33 @@ export default function AdminPage() {
               <label htmlFor="password" className="text-sm font-medium text-slate-800">
                 Mật khẩu
               </label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError('');
-                }}
-                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                placeholder="Nhập mật khẩu admin..."
-                className={cn(
-                  "h-12 bg-white border-slate-200 text-slate-900",
-                  error && "border-red-500"
-                )}
-                autoFocus
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError('');
+                  }}
+                  onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                  placeholder="Nhập mật khẩu admin..."
+                  className={cn(
+                    "h-12 bg-white border-slate-200 pr-12 text-slate-900",
+                    error && "border-red-500"
+                  )}
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  className="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-sky-50 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
               {error && (
                 <p className="text-sm text-red-400">⚠️ {error}</p>
               )}
@@ -278,6 +423,193 @@ export default function AdminPage() {
             </Button>
           </CardContent>
         </Card>
+
+        <Card className="border-sky-100 bg-white shadow-sm">
+          <CardHeader>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2 text-slate-900">
+                  <Users className="h-5 w-5 text-sky-600" />
+                  Giáo viên trực thuộc khu vực
+                </CardTitle>
+                <CardDescription className="mt-1 text-slate-600">
+                  Giáo viên Coding đang hoạt động tại bốn cơ sở thuộc HCM1.
+                </CardDescription>
+              </div>
+              <div className="flex flex-col gap-2 sm:items-end">
+                <div className="rounded-xl bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-700">
+                  {filteredTeachers.length}/{teachers.length} giáo viên
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCopyMindxEmails}
+                  disabled={allMindxEmails.length === 0}
+                  className="h-10 border-sky-200 text-sky-700 hover:bg-sky-50"
+                >
+                  {emailCopyStatus === 'copied' ? (
+                    <Check className="h-4 w-4 mr-2" />
+                  ) : (
+                    <Copy className="h-4 w-4 mr-2" />
+                  )}
+                  {emailCopyStatus === 'copied'
+                    ? `Đã copy ${allMindxEmails.length} email`
+                    : emailCopyStatus === 'error'
+                      ? 'Không copy được'
+                      : `Copy ${allMindxEmails.length} email MindX`}
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px_220px]">
+              <div className="rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-cyan-50 p-4">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">Phân bố thâm niên giáo viên</h3>
+                    <p className="mt-1 text-sm text-slate-600">
+                      Mật độ theo thời gian kể từ ngày onboard
+                    </p>
+                  </div>
+                  <BarChart3 className="h-5 w-5 shrink-0 text-sky-600" />
+                </div>
+                <div
+                  className="space-y-3"
+                  role="img"
+                  aria-label={`Biểu đồ phân bố thâm niên của ${tenureStats.count} giáo viên`}
+                >
+                  {tenureStats.buckets.map((bucket) => (
+                    <div key={bucket.label} className="grid grid-cols-[88px_minmax(0,1fr)_38px] items-center gap-3">
+                      <span className="text-sm font-medium text-slate-700">{bucket.label}</span>
+                      <div className="h-3 overflow-hidden rounded-full bg-white shadow-inner">
+                        <div
+                          className={`h-full rounded-full ${bucket.color}`}
+                          style={{ width: `${(bucket.count / tenureStats.maxBucketCount) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-right text-sm font-bold text-slate-900">{bucket.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-2xl border border-sky-100 bg-white p-4">
+                <CalendarDays className="mb-4 h-6 w-6 text-sky-600" />
+                <p className="text-sm font-semibold text-slate-600">Thâm niên trung bình</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
+                  {Math.floor(tenureStats.averageMonths / 12)}
+                  <span className="ml-1 text-base font-semibold text-slate-500">năm</span>
+                  {' '}
+                  {tenureStats.averageMonths % 12}
+                  <span className="ml-1 text-base font-semibold text-slate-500">tháng</span>
+                </p>
+                <p className="mt-3 text-sm text-slate-500">{tenureStats.count} giáo viên có ngày onboard</p>
+              </div>
+              <div className="rounded-2xl border border-sky-100 bg-white p-4">
+                <Award className="mb-4 h-6 w-6 text-violet-600" />
+                <p className="text-sm font-semibold text-slate-600">Thâm niên cao nhất</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
+                  {Math.floor(tenureStats.longestMonths / 12)}
+                  <span className="ml-1 text-base font-semibold text-slate-500">năm</span>
+                  {' '}
+                  {tenureStats.longestMonths % 12}
+                  <span className="ml-1 text-base font-semibold text-slate-500">tháng</span>
+                </p>
+                <p className="mt-3 text-sm text-slate-500">Tính đến thời điểm hiện tại</p>
+              </div>
+            </div>
+
+            <div className="mb-4 grid gap-3 md:grid-cols-[minmax(0,1fr)_280px_auto]">
+              <label className="relative">
+                <span className="sr-only">Tìm giáo viên</span>
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input
+                  value={teacherQuery}
+                  onChange={(event) => setTeacherQuery(event.target.value)}
+                  className="h-11 bg-white pl-10 text-slate-900"
+                  placeholder="Tìm tên, mã, cơ sở, email, SĐT, rank hoặc ngày onboard"
+                />
+              </label>
+              <label>
+                <span className="sr-only">Lọc theo cơ sở</span>
+                <select
+                  value={teacherCenter}
+                  onChange={(event) => setTeacherCenter(event.target.value)}
+                  className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 shadow-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100"
+                >
+                  <option value="all">Tất cả cơ sở</option>
+                  {teacherCenters.map((center) => (
+                    <option key={center} value={center}>{center}</option>
+                  ))}
+                </select>
+              </label>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={loadTeachers}
+                disabled={teachersLoading}
+                className="h-11 border-sky-200 text-sky-700 hover:bg-sky-50"
+              >
+                {teachersLoading ? 'Đang tải...' : 'Làm mới'}
+              </Button>
+            </div>
+
+            {teachersError ? (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {teachersError}
+              </div>
+            ) : (
+              <>
+                {teachersWarnings.length > 0 && (
+                  <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                    {teachersWarnings.map((warning) => (
+                      <p key={warning}>{warning}</p>
+                    ))}
+                  </div>
+                )}
+                <div className="data-table-shell">
+                  <table className="app-table min-w-[1220px]">
+                    <thead>
+                      <tr>
+                        <th scope="col">Họ và tên</th>
+                        <th scope="col">Mã giáo viên</th>
+                        <th scope="col">Cơ sở trực thuộc</th>
+                        <th scope="col">Email MindX</th>
+                        <th scope="col">Số điện thoại</th>
+                        <th scope="col">Rank K12 check</th>
+                        <th scope="col">Thời gian onboard</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {teachersLoading && teachers.length === 0 ? (
+                        <tr>
+                          <td colSpan={7}>Đang tải danh sách giáo viên...</td>
+                        </tr>
+                      ) : filteredTeachers.length === 0 ? (
+                        <tr>
+                          <td colSpan={7}>Không tìm thấy giáo viên phù hợp.</td>
+                        </tr>
+                      ) : filteredTeachers.map((teacher) => (
+                        <tr key={teacher.code}>
+                          <td className="font-semibold text-slate-900">{teacher.name}</td>
+                          <td>{teacher.code}</td>
+                          <td>{teacher.center}</td>
+                          <td>{teacher.email || '—'}</td>
+                          <td>{teacher.phone || '—'}</td>
+                          <td>{teacher.rankK12 || '—'}</td>
+                          <td>
+                            {formatJoinedDate(teacher.joinedDate)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        <UniformAdminPanel />
 
         {isLoading ? (
           <div className="flex items-center justify-center py-20">

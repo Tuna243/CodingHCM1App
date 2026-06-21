@@ -7,7 +7,7 @@ import {
 import { ExternalLink, MessageSquareText, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 export default function Screen4() {
   const [documentUrl, setDocumentUrl] = useState('');
@@ -43,9 +43,6 @@ export default function Screen4() {
             <MessageSquareText className="h-6 w-6" />
           </div>
           <CardTitle className="text-slate-900">Kho mẫu nhận xét Coding</CardTitle>
-          <CardDescription className="text-slate-600">
-            Quản trị viên có thể cập nhật đường dẫn tài liệu tại trang Admin.
-          </CardDescription>
         </CardHeader>
         <CardContent>
           {documentUrl ? (
@@ -65,9 +62,6 @@ export default function Screen4() {
             <div className="rounded-2xl border border-dashed border-sky-200 bg-sky-50 p-8 text-center">
               <Settings className="mx-auto mb-3 h-9 w-9 text-sky-500" />
               <p className="font-semibold text-slate-900">Tài liệu đang chờ cập nhật</p>
-              <p className="mt-1 text-sm text-slate-600">
-                Vào <strong>/admin</strong> để nhập đường dẫn tài liệu khi sẵn sàng.
-              </p>
             </div>
           )}
         </CardContent>

@@ -8,6 +8,7 @@ Cổng tài liệu và công cụ hỗ trợ giáo viên Coding tại các cơ s
 - Tìm phiếu và các công cụ vận hành được giữ lại từ ứng dụng nguồn.
 - Tài liệu nhận xét Zalo có thể cấu hình tại `/admin`.
 - Danh sách giáo viên lấy động từ Google Sheets, chỉ trả về họ tên, mã giáo viên và cơ sở.
+- Dashboard “Lớp của tôi” đăng nhập LMS, chỉ hiển thị lớp của tài khoản hiện tại và các buổi còn thiếu nhận xét.
 - Giao diện sáng, responsive cho desktop và mobile.
 
 ## Chạy local
@@ -18,7 +19,8 @@ copy .env.example .env.local
 npm run dev
 ```
 
-Thiết lập `ADMIN_PASSWORD` trong `.env.local`. Không commit file `.env.local`.
+Thiết lập `ADMIN_PASSWORD`, `FIREBASE_API_KEY` và `LMS_SESSION_SECRET` trong
+`.env.local`. Không commit file `.env.local`.
 
 ## Kiểm tra
 

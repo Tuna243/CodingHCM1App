@@ -6,13 +6,14 @@
 
 import { cn } from '@/lib/utils';
 import { BookOpen, ExternalLink, FileText, GraduationCap, Rocket } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 interface HomeworkCategory {
   id: string;
   name: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   color: string;
   hoverColor: string;
   courses: {

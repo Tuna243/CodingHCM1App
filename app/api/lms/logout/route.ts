@@ -1,13 +1,13 @@
-import { ADMIN_COOKIE } from '@/lib/adminAuth';
+import { getLmsSession } from '@/lib/lmsSession';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST() {
-  const response = NextResponse.json(
+  const session = await getLmsSession();
+  session.destroy();
+  return NextResponse.json(
     { success: true },
     { headers: { 'Cache-Control': 'private, no-store' } },
   );
-  response.cookies.set(ADMIN_COOKIE, '', { path: '/', maxAge: 0 });
-  return response;
 }
