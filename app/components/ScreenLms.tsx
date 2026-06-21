@@ -512,7 +512,7 @@ export default function ScreenLms() {
               {
                 icon: Clock3,
                 title: 'Ưu tiên đúng hạn',
-                text: 'Buổi 1–4, 6–8 và 10–13 có hạn 24 giờ; buổi 5, 9 và 14 có hạn 48 giờ. Học viên vắng không cần nhận xét.',
+                text: 'Buổi checkpoint và cuối khóa vẫn cần đủ nhận xét học viên và đánh giá quá trình. Hạn xử lý: buổi 5, 9, 14 là 48 giờ; các buổi còn lại là 24 giờ.',
               },
             ].map((item) => (
               <div key={item.title} className="rounded-2xl border border-[#c9ded7] bg-white p-4 shadow-sm">

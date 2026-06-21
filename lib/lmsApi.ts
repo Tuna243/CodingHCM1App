@@ -321,7 +321,7 @@ function hasMeaningfulText(value?: string | null) {
   return Boolean(text && !/^[.,;:!?…\-–—/\\|*_=+~`'"]+$/.test(text));
 }
 
-function hasStudentComment(attendance?: LmsAttendance) {
+function hasCompletedCommentStatus(attendance?: LmsAttendance) {
   if (!attendance) return false;
   const sendStatus = attendance.sendCommentStatus?.toUpperCase();
   const reviewStatus = attendance.commentStatus?.status?.toUpperCase();
@@ -337,16 +337,35 @@ function hasStudentComment(attendance?: LmsAttendance) {
 
   return Boolean(
     (sendStatus && completedStatuses.has(sendStatus)) ||
-      (reviewStatus && completedStatuses.has(reviewStatus)) ||
-      hasMeaningfulText(attendance.comment) ||
+      (reviewStatus && completedStatuses.has(reviewStatus)),
+  );
+}
+
+function hasStudentCommentText(attendance?: LmsAttendance) {
+  if (!attendance) return false;
+  return Boolean(
+    hasMeaningfulText(attendance.comment) ||
       hasMeaningfulText(attendance.commentStatus?.feedback) ||
-      attendance.commentByAreas?.some(
-        (area) =>
-          hasMeaningfulText(area.content) ||
-          area.grade != null ||
-          area.checkpoint?.checkpointScore != null ||
-          area.checkpoint?.practiceScore != null,
-      ),
+      attendance.commentByAreas?.some((area) => hasMeaningfulText(area.content)),
+  );
+}
+
+function hasStudentProcessEvaluation(attendance?: LmsAttendance) {
+  if (!attendance) return false;
+  return Boolean(
+    attendance.commentByAreas?.some(
+      (area) =>
+        area.grade != null ||
+        area.checkpoint?.checkpointScore != null ||
+        area.checkpoint?.practiceScore != null,
+    ),
+  );
+}
+
+function hasStudentCheckpointReview(attendance?: LmsAttendance) {
+  return Boolean(
+    hasCompletedCommentStatus(attendance) ||
+      (hasStudentCommentText(attendance) && hasStudentProcessEvaluation(attendance)),
   );
 }
 
@@ -418,7 +437,7 @@ function classToPersonalView(
           const attendance = attendanceForStudent(student, attendances);
           const absent = ABSENT_STATUSES.has(attendance?.status?.toUpperCase() ?? '');
           if (absent) return [];
-          if (hasStudentComment(attendance)) return [];
+          if (hasStudentCheckpointReview(attendance)) return [];
           return [{
             name: student.student?.fullName?.trim() || `Học viên ${student._id.slice(-4)}`,
             absent: false,
