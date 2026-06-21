@@ -15,7 +15,6 @@ import {
   LogOut,
   RefreshCw,
   School,
-  ShieldCheck,
   UserRound,
   X,
 } from 'lucide-react';
@@ -515,11 +514,6 @@ export default function ScreenLms() {
                 icon: UserRound,
                 title: 'Chỉ dữ liệu của bạn',
                 text: 'Server nhận diện tài khoản LMS và loại bỏ mọi lớp không có bạn trong danh sách giáo viên.',
-              },
-              {
-                icon: ShieldCheck,
-                title: 'Không trả dữ liệu liên hệ',
-                text: 'Frontend không nhận email, số điện thoại, token hoặc dữ liệu HR của giáo viên và học viên.',
               },
               {
                 icon: Clock3,
